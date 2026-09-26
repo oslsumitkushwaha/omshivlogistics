@@ -7,20 +7,10 @@
 
   const C = window.OSL_COMPONENTS;
   const html = htm.bind(React.createElement);
-  const { useState } = React;
 
   /* ------------------------------------------------------------- the page -- */
   function App() {
     C.useReveal();
-
-    // Estimator → Enquiry form hand-off
-    const [prefill, setPrefill] = useState(null);
-
-    const sendToQuote = (payload) => {
-      setPrefill(payload);
-      const el = document.getElementById("enquiry");
-      if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: "smooth" });
-    };
 
     return html`
       <${React.Fragment}>
@@ -30,12 +20,10 @@
         <${C.Marquee} />
         <${C.Services} />
         <${C.Fleet} />
+        <${C.Segments} />
         <${C.WhyUs} />
         <${C.HowWeWork} />
-        <${C.Estimator} onSendToQuote=${sendToQuote} />
         <${C.DispatchBoard} />
-        <${C.Lanes} />
-        <${C.EnquiryForm} prefill=${prefill} onConsumed=${() => setPrefill(null)} />
         <${C.Faq} />
         <${C.Posters} />
         <${C.Contact} />

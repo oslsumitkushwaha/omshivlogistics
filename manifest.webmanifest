@@ -1,0 +1,20 @@
+{
+  "name": "Om Shiv Logistics — Fleet Owner & Transport Contractor, Gandhidham",
+  "short_name": "OSL Logistics",
+  "description": "B2B fleet owner and transport contractor in Gandhidham, Kutch. Container booking, FTL/PTL road transport, long-term contracts and commission agency services across India.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050d18",
+  "theme_color": "#0a1626",
+  "lang": "en-IN",
+  "categories": ["business", "transportation", "logistics"],
+  "icons": [
+    {
+      "src": "images/osl-logo-mark.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

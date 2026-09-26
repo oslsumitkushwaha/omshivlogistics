@@ -1,6 +1,12 @@
 /* ==========================================================================
    OM SHIV LOGISTICS — content & configuration
-   Single source of truth for copy, contacts, services and quote logic.
+   Single source of truth for copy, contacts, services and fleet data.
+
+   COPY POLICY (important):
+   Everything below is either taken from the client's own brief / posters, or is
+   plainly descriptive. No invented statistics, no made-up transit times, no
+   fabricated rate figures and no testimonials. Anything the client has not
+   confirmed is either omitted or explicitly hedged.
    ========================================================================== */
 (function () {
   "use strict";
@@ -18,32 +24,151 @@
       line2: "Zhanda Chowk, Gandhidham 370201",
       line3: "Kutch, Gujarat, India"
     },
+    // Flat list kept for the header / footer / mobile bar.
     phones: [
       { label: "Transport Booking", number: "+91 93745 29413", raw: "919374529413" },
       { label: "Fleet & Dispatch", number: "+91 93744 29413", raw: "919374429413" },
       { label: "Operations & Support", number: "+91 92740 47949", raw: "919274047949" }
     ],
-    // Enquiry inbox (as requested)
     email: "gandhidham@omshivlogistics.com",
     generalEmail: "contact@omshivlogistics.com",
     whatsapp: "919374529413"
   };
+
+  /* ------------------------------------------------------------------------
+     POINT OF CONTACT — grouped by information category so a visitor can tell
+     at a glance which channel to use for what.
+     -------------------------------------------------------------------- */
+  const CONTACT_GROUPS = [
+    {
+      id: "commercial",
+      icon: "fa-file-invoice-dollar",
+      accent: "crimson",
+      title: "Bookings, Pricing & Contracts",
+      note: "Use these for new consignments, formal quotes and long-term transport contracts.",
+      items: [
+        {
+          kind: "phone",
+          label: "Transport Booking",
+          value: "+91 93745 29413",
+          raw: "919374529413",
+          note: "Primary line for bookings and quotations"
+        },
+        {
+          kind: "whatsapp",
+          label: "WhatsApp Desk",
+          value: "Chat on WhatsApp",
+          raw: "919374529413",
+          note: "Send load details, documents or drawings"
+        },
+        {
+          kind: "email",
+          label: "Business Enquiries",
+          value: "gandhidham@omshivlogistics.com",
+          note: "Kutch operations inbox — quotes and documentation"
+        },
+        {
+          kind: "note",
+          label: "Response Window",
+          value: "New enquiries are answered during office hours",
+          note: "For anything already in transit, use the operations lines below"
+        }
+      ]
+    },
+    {
+      id: "operations",
+      icon: "fa-tower-broadcast",
+      accent: "navy",
+      title: "Operations, Dispatch & 24/7 Support",
+      note: "For consignments already booked — placement, transit updates and exceptions.",
+      items: [
+        {
+          kind: "phone",
+          label: "Fleet & Dispatch",
+          value: "+91 93744 29413",
+          raw: "919374429413",
+          note: "Vehicle placement and dispatch coordination"
+        },
+        {
+          kind: "phone",
+          label: "Operations & Support",
+          value: "+91 92740 47949",
+          raw: "919274047949",
+          note: "Documentation, transit and escalation"
+        },
+        {
+          kind: "hours",
+          label: "Support Lines",
+          value: "24 / 7 round-the-clock",
+          note: "Backed by active transport oversight"
+        }
+      ]
+    },
+    {
+      id: "office",
+      icon: "fa-location-dot",
+      accent: "gold",
+      title: "Head Office",
+      note: "Gandhidham, Kutch — the base of our fleet and dispatch operations.",
+      items: [
+        {
+          kind: "address",
+          label: "Office Address",
+          value: "North Flour Mill Building, Office No. 203",
+          extra: "Zhanda Chowk, Gandhidham 370201",
+          note: "Kutch, Gujarat, India"
+        },
+        {
+          kind: "note",
+          label: "Visits",
+          value: "Please call ahead to confirm availability",
+          note: "Site and warehouse visits can be arranged on request"
+        }
+      ]
+    },
+    {
+      id: "statutory",
+      icon: "fa-file-shield",
+      accent: "slate",
+      title: "Business & Statutory Details",
+      note: "For vendor onboarding, purchase departments and accounts teams.",
+      items: [
+        {
+          kind: "person",
+          label: "Proprietor",
+          value: "Indradev Kushwaha",
+          note: "Fleet Owner"
+        },
+        {
+          kind: "gst",
+          label: "GSTIN",
+          value: "24EGFPK8451Q1ZQ",
+          note: "Compliant tax invoicing on all bookings"
+        },
+        {
+          kind: "email",
+          label: "General Enquiries",
+          value: "contact@omshivlogistics.com",
+          note: "Corporate correspondence and billing"
+        }
+      ]
+    }
+  ];
 
   /* Short single-word labels keep the desktop header on ONE line. */
   const NAV = [
     { id: "services", label: "Services" },
     { id: "fleet", label: "Fleet" },
     { id: "how-we-work", label: "Process" },
-    { id: "estimator", label: "Estimator" },
-    { id: "lanes", label: "Lanes" },
-    { id: "faq", label: "FAQ" }
+    { id: "faq", label: "FAQ" },
+    { id: "contact", label: "Contact" }
   ];
 
   const HERO_STATS = [
-    { value: "500+", label: "Vehicles in network" },
-    { value: "10 Tyre", label: "To multi-axle & trailer" },
+    { value: "500+", label: "Commercial vehicles" },
+    { value: "10 Tyre+", label: "Own fleet class" },
     { value: "Pan India", label: "Pickup & delivery" },
-    { value: "24/7", label: "Dispatch & support" }
+    { value: "24/7", label: "Operations support" }
   ];
 
   const MARQUEE = [
@@ -64,7 +189,7 @@
       icon: "fa-truck-ramp-box",
       title: "Vehicle Supply & Container Booking",
       summary:
-        "A live network of 500+ commercial vehicles plus confirmed container capacity — matched to your load, not to a spot-market guess.",
+        "A network of 500+ commercial vehicles plus container capacity — matched to your load rather than to a spot-market guess.",
       points: [
         "Multi-axle trucks, trailers & open-body units",
         "LCVs for intra-city & mid-mile transit",
@@ -77,11 +202,11 @@
       icon: "fa-file-signature",
       title: "End-to-End Transport Contracting",
       summary:
-        "Steady transport infrastructure for corporations that cannot afford to depend on a volatile spot market.",
+        "Steady transport infrastructure for businesses that cannot depend on a volatile spot market.",
       points: [
         "Dedicated trucks for weekly / monthly volumes",
         "Terms flexed around seasonal demand",
-        "Fixed pricing for predictable freight cost",
+        "Fixed structures for predictable freight cost",
         "Load-layout planning to cut cost per tonne"
       ]
     },
@@ -92,8 +217,8 @@
       summary:
         "An intermediary logistics arm that bridges capacity gaps using regional networks built over years in Kutch.",
       points: [
-        "Rapid dispatch of certified backup fleets",
-        "Route optimisation across seasons & tolls",
+        "Rapid sourcing of certified backup fleets",
+        "Route planning across seasons & tolls",
         "Extra capacity during demand peaks",
         "Transparent, ethics-first intermediation"
       ]
@@ -103,7 +228,7 @@
       icon: "fa-satellite-dish",
       title: "Fleet & Dispatch Management",
       summary:
-        "Structured workflows that plug straight into your warehouse operations, with one accountable point of contact.",
+        "Structured workflows that plug into your warehouse operations, with one accountable point of contact.",
       points: [
         "Credentialed drivers vetted for heavy loads",
         "On-time dispatch coordination with your team",
@@ -123,7 +248,7 @@
 
   const WHY = [
     { icon: "fa-shield-halved", title: "Committed & Trustworthy", text: "Your cargo is our responsibility — from pickup to proof of delivery." },
-    { icon: "fa-map-location-dot", title: "Pan India Network", text: "Strong presence in all major hubs, with Kutch as our home ground." },
+    { icon: "fa-map-location-dot", title: "Pan India Network", text: "Strong presence in the major hubs, with Kutch as our home ground." },
     { icon: "fa-headset", title: "Informed & Responsive", text: "Clear communication and quick support, not silence between checkposts." },
     { icon: "fa-user-tie", title: "We Listen. We Care. We Deliver.", text: "Your goals drive our actions — pricing, routing and scheduling." },
     { icon: "fa-scale-balanced", title: "Professional & Transparent", text: "Ethics, process and trust in every step of the transaction." },
@@ -131,10 +256,18 @@
   ];
 
   const STEPS = [
-    { title: "Share Your Requirement", text: "Send load details, origin–destination and schedule through the form, a call or WhatsApp." },
-    { title: "Route & Cost Planning", text: "We map the lane, weigh seasonal and toll factors, and propose the most cost-effective plan." },
-    { title: "Vehicle Placement", text: "A vetted vehicle and credentialed driver are placed at your gate on the confirmed date." },
-    { title: "Transit Monitoring", text: "24/7 oversight with proactive updates and exception handling until unloading." }
+    { title: "Share Your Requirement", text: "Send load details, origin–destination and schedule over a call or WhatsApp." },
+    { title: "Route & Cost Planning", text: "We map the lane, weigh seasonal and toll factors, and propose a cost-effective plan." },
+    { title: "Vehicle Placement", text: "A vetted vehicle and credentialed driver are placed at your gate on the agreed date." },
+    { title: "Transit Monitoring", text: "Oversight with proactive updates and exception handling through to unloading." }
+  ];
+
+  /* Client industries — taken directly from the brief, kept factual. */
+  const SEGMENTS = [
+    { icon: "fa-industry", title: "Manufacturing Units", text: "Raw material, machinery and secondary production freight." },
+    { icon: "fa-mountain-sun", title: "Extraction Industries", text: "Heavy bulk movement from extraction and processing sites." },
+    { icon: "fa-warehouse", title: "Distribution Plants", text: "Reliable inbound and outbound distribution cycles." },
+    { icon: "fa-ship", title: "Port-Linked Cargo", text: "Kandla and Mundra port movement with documentation support." }
   ];
 
   const FAQS = [
@@ -144,7 +277,7 @@
     },
     {
       q: "Do you work on long-term transport contracts?",
-      a: "Yes. End-to-end transport contracting is a core specialisation. We provision dedicated trucks for predictable weekly or monthly volumes, with terms flexed around seasonal demand or fluctuating industrial output, and fixed pricing structures so you can plan annual freight expenditure."
+      a: "Yes. End-to-end transport contracting is a core specialisation. We provision dedicated trucks for predictable weekly or monthly volumes, with terms flexed around seasonal demand or fluctuating industrial output, and fixed structures so you can plan annual freight expenditure."
     },
     {
       q: "Which industries and regions do you serve?",
@@ -152,60 +285,28 @@
     },
     {
       q: "How fast can you arrange a vehicle in an emergency?",
-      a: "Our commission agency arm exists precisely for capacity gaps. Using regional networks we dispatch certified backup fleets quickly during demand peaks. Call our Transport Booking line for immediate requirements."
+      a: "Our commission agency arm exists precisely for capacity gaps. Using regional networks we source certified backup fleets during demand peaks. Call the Transport Booking line with your origin, destination, vehicle type and loading date, and we will confirm availability."
     },
     {
       q: "How is freight priced?",
-      a: "Pricing is built on lane distance, vehicle type, load weight and handling requirements — with transparent structuring and load-layout planning to maximise space per truck and bring down individual freight cost. Use the Freight Estimator above for an indicative average, then confirm with a formal quote."
+      a: "Pricing is built on lane distance, vehicle type, load weight and handling requirements — with load-layout planning to maximise space per truck and bring down cost per tonne. Share your lane and load details and we will revert with a formal quotation."
     },
     {
       q: "Do you provide a GST invoice?",
       a: "Yes. Om Shiv Logistics is GST registered (GSTIN 24EGFPK8451Q1ZQ) and issues compliant tax invoices for all bookings."
+    },
+    {
+      q: "What do you need from us to quote?",
+      a: "Origin and destination, material and approximate weight, vehicle or container size, preferred loading date, and any handling or documentation requirements. If you have drawings or packing lists, send them over WhatsApp and we will factor them in."
     }
   ];
 
-  const LANES_SEED = [
-    { from_city: "Gandhidham", to_city: "Ahmedabad", transit_days: "1–2 days", frequency: "Daily", vehicle: "32FT SXL / MXL, 10-tyre", note: "Hub-to-hub, ICD & warehouse movement" },
-    { from_city: "Kandla / Mundra Port", to_city: "Delhi NCR", transit_days: "4–5 days", frequency: "Weekly", vehicle: "32FT MXL, Trailer", note: "Port-linked container & bulk cargo" },
-    { from_city: "Gandhidham", to_city: "Mumbai / JNPT", transit_days: "2–3 days", frequency: "3–4 per week", vehicle: "32FT MXL, Multi-axle", note: "Export-import and distribution freight" },
-    { from_city: "Kutch (Bhuj / Anjar)", to_city: "Jaipur / North India", transit_days: "3–4 days", frequency: "Weekly", vehicle: "Open-body, Trailer", note: "Manufacturing raw material & machinery" },
-    { from_city: "Gandhidham", to_city: "Hyderabad / Bengaluru", transit_days: "5–6 days", frequency: "Weekly", vehicle: "32FT MXL, Trailer", note: "Long-haul heavy-duty movement" },
-    { from_city: "Gandhidham", to_city: "Kolkata", transit_days: "7–8 days", frequency: "Fortnightly", vehicle: "Trailer, Multi-axle", note: "Pan India bulk dispatch" }
-  ];
-
-  /* ---- Freight estimator configuration (indicative, client-side only) ---- */
-  const ESTIMATOR = {
-    cities: [
-      "Ahmedabad", "Anjar", "Bengaluru", "Bhuj", "Chennai", "Delhi NCR", "Gandhidham",
-      "Hyderabad", "Indore", "Jaipur", "Kandla Port", "Kolkata", "Lucknow", "Mundra Port",
-      "Mumbai / JNPT", "Nagpur", "Pune", "Surat", "Vadodara", "Visakhapatnam"
-    ],
-    // Indicative one-way road distances (km) from Gandhidham / Kutch
-    distances: {
-      "Ahmedabad": 330, "Anjar": 40, "Bengaluru": 1740, "Bhuj": 55, "Chennai": 2020,
-      "Delhi NCR": 1180, "Gandhidham": 0, "Hyderabad": 1450, "Indore": 720, "Jaipur": 900,
-      "Kandla Port": 35, "Kolkata": 2250, "Lucknow": 1450, "Mundra Port": 60,
-      "Mumbai / JNPT": 800, "Nagpur": 1050, "Pune": 900, "Surat": 500,
-      "Vadodara": 430, "Visakhapatnam": 1900
-    },
-    // Indicative base rate per km by vehicle class (INR), before load factor
-    vehicles: {
-      "LCV (Tata 407 / pick-up)": { rate: 26, capacity: "1.5 – 3 MT", icon: "fa-truck-fast" },
-      "10-Tyre Truck": { rate: 44, capacity: "9 – 16 MT", icon: "fa-truck" },
-      "12-Tyre Truck": { rate: 50, capacity: "16 – 21 MT", icon: "fa-truck" },
-      "32FT SXL Container (9MT)": { rate: 46, capacity: "9 MT", icon: "fa-cube" },
-      "32FT MXL Container (18MT)": { rate: 58, capacity: "18 MT", icon: "fa-cube" },
-      "Multi-Axle / Trailer": { rate: 68, capacity: "25 – 40 MT", icon: "fa-trailer" }
-    },
-    loadFactors: {
-      "Part Load (PTL)": 0.55,
-      "Full Truck Load (FTL)": 1,
-      "Heavy / OD Cargo": 1.18
-    }
-  };
+  /* Fleet specialisation, repeated where it matters — sourced from the client's own poster. */
+  const SPECIALISATION = "Fleet owner of 32FT SXL (9MT) / MXL (18MT) containers";
 
   window.OSL_DATA = {
     CONTACT: CONTACT,
+    CONTACT_GROUPS: CONTACT_GROUPS,
     NAV: NAV,
     HERO_STATS: HERO_STATS,
     MARQUEE: MARQUEE,
@@ -213,8 +314,8 @@
     FLEET: FLEET,
     WHY: WHY,
     STEPS: STEPS,
+    SEGMENTS: SEGMENTS,
     FAQS: FAQS,
-    LANES_SEED: LANES_SEED,
-    ESTIMATOR: ESTIMATOR
+    SPECIALISATION: SPECIALISATION
   };
 })();

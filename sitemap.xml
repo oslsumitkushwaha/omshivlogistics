@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!--
+  XML sitemap for Om Shiv Logistics.
+  This is a single-page site; the anchor links below are listed as separate
+  <url> entries only for the primary landing page. Deep anchors are not
+  separate documents, so they are intentionally not listed individually.
+  Update <loc> if the live domain differs.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://omshivlogistics.com/</loc>
+    <loc>https://www.omshivlogistics.com/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.omshivlogistics.com/images/osl-pan-india-poster.png</image:loc>
+      <image:title>Om Shiv Logistics — Pan India presence and core services</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.omshivlogistics.com/images/osl-solutions-poster.png</image:loc>
+      <image:title>Om Shiv Logistics — complete logistics solutions for your business</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.omshivlogistics.com/images/osl-fleet-owner-poster.png</image:loc>
+      <image:title>Indradev Kushwaha, fleet owner of 32FT SXL and MXL containers, Gandhidham</image:title>
+    </image:image>
   </url>
 </urlset>
