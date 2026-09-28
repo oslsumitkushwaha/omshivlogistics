@@ -299,6 +299,35 @@
     }
   ];
 
+  /* ------------------------------------------------------------ client wall --
+     The client's own logo artwork, shown exactly as supplied — nothing is
+     re-drawn, recoloured or inverted.
+
+     `tone` says which tile each mark must sit on to stay legible, and it was
+     measured from the actual pixels rather than guessed:
+       · tone "light" — artwork is dark, or the file carries a baked-in WHITE
+         background. Rendered on a white tile with mix-blend-mode: multiply, so
+         the baked white vanishes into the tile.
+       · tone "dark"  — the file carries a baked-in BLACK background. Rendered
+         on a navy tile with mix-blend-mode: screen, so the black vanishes.
+     Getting this per-logo (instead of one uniform tile) is what keeps every
+     logo readable; a single treatment makes several of them disappear.
+     ------------------------------------------------------------------------ */
+  const CLIENTS = [
+    { name: "HD Microns Limited", src: "images/clients/hd-microns.png", tone: "light" },
+    { name: "N. K. Proteins Pvt. Ltd.", src: "images/clients/nk-proteins.png", tone: "light" },
+    { name: "Rama Cylinders", src: "images/clients/rama-cylinders.png", tone: "light" },
+    { name: "Diab", src: "images/clients/diab.jpg", tone: "light" },
+    { name: "Aeroplast", src: "images/clients/aeroplast.png", tone: "light" },
+    { name: "Karamtara", src: "images/clients/karamtara.jpg", tone: "dark" },
+    { name: "Marvellite", src: "images/clients/marvellite.jpg", tone: "dark" },
+    { name: "Strata Geosystems (India) Pvt. Ltd.", src: "images/clients/strata.jpg", tone: "light" },
+    { name: "Ambica Steels Limited", src: "images/clients/ambica-steels.jpg", tone: "light" },
+    { name: "Zetts Cosmetics", src: "images/clients/zetts.jpg", tone: "light" },
+    { name: "Everest Kanto Cylinder Limited", src: "images/clients/ekc.png", tone: "light" },
+    { name: "SKAPS", src: "images/clients/skaps.png", tone: "dark" }
+  ];
+
   window.OSL_DATA = {
     CONTACT: CONTACT,
     CONTACT_GROUPS: CONTACT_GROUPS,
@@ -310,6 +339,7 @@
     WHY: WHY,
     STEPS: STEPS,
     SEGMENTS: SEGMENTS,
-    FAQS: FAQS
+    FAQS: FAQS,
+    CLIENTS: CLIENTS
   };
 })();

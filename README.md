@@ -51,17 +51,44 @@ uppercase slabs, which is what gives the page a modern, premium feel.
 ### Sections (in page order)
 1. **Sticky header** — OSL logo mark, single-line scroll-spy nav (Services · Fleet · Process · FAQ · Contact), booking phone, "Get a Quote" CTA, mobile drawer.
 2. **Hero** — headline with gradient accent, location chip, two CTAs, four KPI stats, and an **animated pan-India network map** (SVG) with Gandhidham as the hub.
-3. **Crimson marquee band** — scrolling core-service ticker (pauses on hover).
-4. **Core Services** — **four consolidated pillars in one row**, each absorbing the client's original six specialisations.
-5. **Fleet Ownership** (dark) — **four consolidated vehicle groups in one row** plus a stat band.
-6. **Who We Work With** — four client-industry cards (manufacturing, extraction, distribution, port-linked).
-7. **Why Clients Choose OSL** — the six brand pillars from the client's posters.
-8. **How We Work** — four numbered steps plus two deep-dive columns on contracting and agency sourcing.
-9. **Network & Coverage** (dark) — lane description with a self-updating sample consignment panel, clearly labelled as illustrative.
-10. **FAQ** — accordion with six answers (mirrored in FAQPage structured data).
-11. **Brand** — the three original OSL posters, clickable to full size.
-12. **Point of Contact** — see below.
-13. **Footer** — full OSL logo lockup, services, quick links and contacts.
+3. **Client wall — "Trusted by"** (dark) — **two counter-scrolling rows** of the client's own logos, immediately below the hero. See below.
+4. **Crimson marquee band** — scrolling core-service ticker (pauses on hover).
+5. **Core Services** — **four consolidated pillars in one row**, each absorbing the client's original six specialisations.
+6. **Fleet Ownership** (dark) — **four consolidated vehicle groups in one row** plus a stat band.
+7. **Who We Work With** — four client-industry cards (manufacturing, extraction, distribution, port-linked).
+8. **Why Clients Choose OSL** — the six brand pillars from the client's posters.
+9. **How We Work** — four numbered steps plus two deep-dive columns on contracting and agency sourcing.
+10. **Network & Coverage** (dark) — lane description with a self-updating sample consignment panel, clearly labelled as illustrative.
+11. **FAQ** — accordion with six answers (mirrored in FAQPage structured data).
+12. **Brand** — the three original OSL posters, clickable to full size.
+13. **Point of Contact** — see below.
+14. **Footer** — full OSL logo lockup, services, quick links and contacts.
+
+### Client wall — placement, motion and logo legibility
+The wall sits **directly under the hero**, on a dark band, so social proof lands before the visitor reads
+the service detail — the strongest position on the page for it. Two rows of tiles drift in **opposite
+directions** (the top row left, the bottom row right) inside one `requestAnimationFrame` loop that owns
+both rows' positions, so ambient motion, drag, fling momentum and the hover pause can never fight each
+other. It can be explored by **drag, horizontal trackpad/shift-wheel, arrow keys, or swipe**, and it
+**never hijacks vertical page scroll** (the viewport uses `touch-action: pan-y`).
+
+**Each logo is shown exactly as supplied — nothing is redrawn, recoloured or inverted.** The tiles are
+not a uniform colour, because the twelve supplied files are not uniform. Their backgrounds were measured
+from the actual pixels:
+
+| Background of the supplied file | Tone used | Count | Treatment |
+| --- | --- | --- | --- |
+| Transparent, dark artwork, **or** baked-in **white** plate | `light` | 9 | White tile, `mix-blend-mode: multiply` |
+| Baked-in **black** plate | `dark` | 3 | Navy tile, `mix-blend-mode: screen` |
+
+The blend mode dissolves each file's baked-in plate into its tile, so no logo prints as a stray white or
+black rectangle. This was tested empirically: a single uniform treatment left the three black-background
+marks (Karamtara, Marvellite, SKAPS) sitting on visible black boxes, and an `invert()`/`hue-rotate()` fix
+**distorted their brand colours** — rejected. The per-logo tone approach keeps every mark legible in its
+true colours. `tone` lives beside each entry in `CLIENTS` (`js/data.js`).
+
+The section also respects `prefers-reduced-motion` (ambient drift stops; manual drag still works) and
+only animates while on screen.
 
 ### Point of Contact — classified and grouped
 The section is deliberately **grouped by information category**, and each group is visually
@@ -171,6 +198,7 @@ audited and deliberately constrained:
 | Path | Purpose |
 | --- | --- |
 | `/index.html` | The entire landing page (single page, anchor navigation) |
+| `/#clients` | Client wall — "Trusted by" logo rows |
 | `/#services` | Core Services |
 | `/#fleet` | Fleet ownership & vehicle classes |
 | `/#industries` | Who we work with |
@@ -195,11 +223,12 @@ robots.txt            crawl directives
 sitemap.xml           XML sitemap with image entries
 manifest.webmanifest  PWA metadata
 css/style.css         full brand theme, layout, animations, responsive rules
-js/data.js            all content: contacts & contact groups, services, fleet, FAQs
+js/data.js            all content: contacts & contact groups, services, fleet, FAQs, clients
 js/components.js      React components (React 18 + htm)
 js/app.js             entry point; mounts the React tree
 js/vendor/            react, react-dom, htm (local copies, no build step)
 images/               OSL logo artwork + the three brand posters
+images/clients/       12 client logos shown in the "Trusted by" wall
 ```
 
 To edit copy or contacts, change **`js/data.js` only** — no component edits needed.
@@ -215,6 +244,32 @@ To edit copy or contacts, change **`js/data.js` only** — no component edits ne
 | `images/osl-pan-india-poster.png` | Brand section creative |
 | `images/osl-solutions-poster.png` | Brand section creative |
 | `images/osl-fleet-owner-poster.png` | Brand section creative |
+
+### Client logos (`images/clients/`)
+Twelve client logos are shown in the "Trusted by" wall, each exactly as supplied:
+
+| Company | File | Tile tone |
+| --- | --- | --- |
+| HD Microns Limited | `hd-microns.png` | light |
+| N. K. Proteins Pvt. Ltd. | `nk-proteins.png` | light |
+| Rama Cylinders | `rama-cylinders.png` | light |
+| Diab | `diab.jpg` | light |
+| Aeroplast | `aeroplast.png` | light |
+| Karamtara | `karamtara.jpg` | dark |
+| Marvellite | `marvellite.jpg` | dark |
+| Strata Geosystems (India) Pvt. Ltd. | `strata.jpg` | light |
+| Ambica Steels Limited | `ambica-steels.jpg` | light |
+| Zetts Cosmetics | `zetts.jpg` | light |
+| Everest Kanto Cylinder Limited | `ekc.png` | light |
+| SKAPS | `skaps.png` | dark |
+
+> **Action required by the site owner:** these are third-party trademarks. Please confirm you hold
+> permission to display each client's mark publicly before publishing, and double-check the exact legal
+> names and any "Pvt. Ltd." / "Limited" wording. Two names in particular are worth verifying: the
+> gas-cylinder mark was read as **Rama Cylinders**, and **Ambica Steels Limited** is the logo's own
+> strapline text. If a client prefers not to be listed, delete its row from `CLIENTS` in `js/data.js` —
+> the wall re-flows automatically (the rows are rebuilt from the array, so an empty array renders
+> nothing and the section can be removed from `js/app.js` entirely).
 
 **Important:** the supplied logo PNGs are 1024×1024 files whose artwork occupies only a narrow
 horizontal band (measured bounds: mark = 910×237 at x64,y388; full lockup = 848×280 at x91,y407).

@@ -17,6 +17,7 @@
         <${C.ScrollProgress} />
         <${C.Header} />
         <${C.Hero} />
+        <${C.Clients} />
         <${C.Marquee} />
         <${C.Services} />
         <${C.Fleet} />

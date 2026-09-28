@@ -522,6 +522,135 @@ ul { margin: 0; padding: 0; list-style: none; }
 .section-head--center .eyebrow { justify-content: center; }
 .section-head--center .lede { margin-left: auto; margin-right: auto; }
 
+/* ---------------------------------------------------------- client wall -- */
+/* Social proof sits high on the page, immediately after the hero band. Two
+   counter-scrolling rows of the client's own logo artwork on a dark canvas. */
+.clients {
+  position: relative;
+  padding: 84px 0 72px;
+  background:
+    radial-gradient(760px 300px at 12% 0%, rgba(228, 0, 43, 0.12), transparent 60%),
+    radial-gradient(700px 320px at 90% 100%, rgba(233, 185, 73, 0.09), transparent 62%),
+    linear-gradient(160deg, var(--ink-950), var(--ink-800));
+  color: #fff;
+  overflow: hidden;
+}
+.clients h2, .clients h3 { color: #fff; }
+.clients .section-head { margin-bottom: 40px; }
+
+.clients__wall { position: relative; }
+
+.clients__viewport {
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;          /* horizontal drag must not block vertical page scroll */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  padding: 6px 0 4px;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.clients__viewport:focus-visible { outline: 3px solid var(--brand-400); outline-offset: 4px; border-radius: 14px; }
+.clients__viewport.is-dragging { cursor: grabbing; }
+.clients__viewport.is-dragging .client-tile { transition: none; }
+
+.clients__track { display: flex; flex-direction: column; gap: 14px; }
+
+.clients__row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 14px;
+  width: max-content;
+  will-change: transform;
+}
+
+.client-tile {
+  flex: 0 0 auto;
+  position: relative;
+  width: 216px;
+  height: 108px;
+  display: grid;
+  place-items: center;
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: #fbfcfe;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34);
+  overflow: hidden;
+  /* Keep each mark's blend mode scoped to its own tile. */
+  isolation: isolate;
+  transition: transform 0.26s ease, box-shadow 0.26s ease, background 0.26s ease;
+}
+/* Dark artwork, or artwork with a baked-in white background: multiply drops
+   that white plate into the tile so only the mark remains. */
+.client-tile--light img { mix-blend-mode: multiply; }
+/* Files with a baked-in black background: screen drops the black plate. */
+.client-tile--dark {
+  background: #16304f;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+.client-tile--dark img { mix-blend-mode: screen; }
+
+.client-tile img {
+  max-width: 100%;
+  max-height: 54px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* The company name is real text (useful for crawlers and assistive tech where a
+   logo image alone says very little), but the artwork already spells it out, so
+   it stays visually hidden. */
+.client-tile__name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (hover: hover) {
+  .client-tile:hover {
+    transform: translateY(-4px);
+    background: #fff;
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(233, 185, 73, 0.5);
+  }
+  .client-tile--dark:hover { background: #1b3c62; }
+}
+
+.clients__hint {
+  margin: 22px 0 0;
+  text-align: center;
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8fa0b6;
+  transition: opacity 0.5s ease;
+}
+.clients__hint i { margin-right: 7px; color: var(--gold); }
+.clients__wall.is-interacted .clients__hint { opacity: 0.32; }
+
+@media (max-width: 680px) {
+  .clients { padding: 62px 0 54px; }
+  .clients__track { gap: 11px; }
+  .clients__row { gap: 11px; }
+  .client-tile { width: 168px; height: 92px; padding: 12px 15px; border-radius: 13px; }
+  .client-tile img { max-height: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .client-tile { transition: none; }
+}
+
 /* -------------------------------------------------------------- services -- */
 .service-grid {
   display: grid;

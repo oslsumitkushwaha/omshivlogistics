@@ -111,11 +111,11 @@
     `;
   }
 
-  function SectionHead({ eyebrow, title, lede, center, dark }) {
+  function SectionHead({ eyebrow, title, titleId, lede, center, dark }) {
     return html`
       <div class=${"section-head" + (center ? " section-head--center" : "")}>
         ${eyebrow ? html`<span class=${"eyebrow" + (dark ? " on-dark" : "")}>${eyebrow}</span>` : null}
-        <h2>${title}</h2>
+        <h2 id=${titleId || null}>${title}</h2>
         ${lede ? html`<p class=${"lede" + (dark ? " on-dark" : "")}>${lede}</p>` : null}
       </div>
     `;
@@ -390,6 +390,240 @@
           ${doubled.map((t, i) => html`<span key=${i}>${t}</span>`)}
         </div>
       </div>
+    `;
+  }
+
+  /* ----------------------------------------------------------- client wall -- */
+  /* The client's own logo artwork, shown exactly as supplied — never redrawn,
+     recoloured or inverted. Each mark sits on the tile its own pixels require
+     (see CLIENTS in data.js): a light tile with multiply for dark artwork and
+     for files carrying a baked-in WHITE background, a navy tile with screen for
+     the three files carrying a baked-in BLACK background. The blend mode makes
+     that baked-in background dissolve into the tile, so every logo stays
+     legible and keeps its true colours.
+
+     One requestAnimationFrame loop owns the horizontal position of BOTH rows,
+     so ambient drift, pointer drag, the fling momentum and the hover pause all
+     read a single value and cannot fight one another. Touch uses
+     `touch-action: pan-y`, so dragging the wall sideways never blocks the
+     normal vertical page scroll. */
+  function Clients() {
+    const items = D.CLIENTS;
+    /* Split into two equal-length rows so both rows share one set width. */
+    const half = Math.ceil(items.length / 2);
+    const rowA = items.slice(0, half);
+    const rowB = [];
+    for (let i = 0; i < half; i++) rowB.push(items[(half + i) % items.length]);
+
+    /* Enough copies that the track can always cover the viewport (safe past 4K)
+       while the seam stays invisible. */
+    const COPIES = 4;
+
+    const viewportRef = useRef(null);
+    const trackRef = useRef(null);
+    const [interacted, setInteracted] = useState(false);
+    const st = useRef({
+      offset: 0, velocity: 0, dragging: false, paused: false,
+      lastX: 0, lastT: 0, setW: 0, visible: true, reduced: false
+    });
+
+    useEffect(() => {
+      const vp = viewportRef.current;
+      const track = trackRef.current;
+      if (!vp || !track) return;
+      const s = st.current;
+      const rowsEls = Array.prototype.slice.call(track.children);
+
+      /* Measure one set (first tile of copy 2 minus first tile of copy 1).
+         Exact even with flex gaps, and stable before images load because tile
+         widths are fixed in CSS. */
+      const measure = () => {
+        const row = rowsEls[0];
+        if (!row || row.children.length <= half) {
+          s.setW = row ? Math.max(1, row.scrollWidth / 2) : 1;
+          return;
+        }
+        const delta = row.children[half].offsetLeft - row.children[0].offsetLeft;
+        s.setW = Math.max(1, delta || row.scrollWidth / 2);
+      };
+      measure();
+
+      const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const onMq = () => { s.reduced = mq.matches; };
+      onMq();
+      if (mq.addEventListener) mq.addEventListener("change", onMq);
+      else if (mq.addListener) mq.addListener(onMq);
+
+      /* Only animate while the wall is actually on screen. */
+      let io;
+      if ("IntersectionObserver" in window) {
+        io = new IntersectionObserver((entries) => { s.visible = entries[0].isIntersecting; }, { threshold: 0.02 });
+        io.observe(vp);
+      }
+
+      let ro;
+      if ("ResizeObserver" in window) {
+        ro = new ResizeObserver(measure);
+        ro.observe(track);
+      } else {
+        window.addEventListener("resize", measure);
+      }
+
+      const wrap = (v) => { const w = s.setW || 1; return ((v % w) + w) % w; };
+
+      let raf = 0;
+      let prev = performance.now();
+      const frame = (now) => {
+        raf = requestAnimationFrame(frame);
+        const dt = Math.min(64, now - prev) / 1000;
+        prev = now;
+        if (!s.visible || s.setW <= 1) return;
+
+        if (!s.dragging) {
+          if (Math.abs(s.velocity) > 8) {
+            /* fling carried over from a flick, decaying smoothly */
+            s.offset += s.velocity * dt;
+            s.velocity *= Math.pow(0.0015, dt);
+          } else {
+            s.velocity = 0;
+            if (!s.paused && !s.reduced) s.offset += 30 * dt;
+          }
+        }
+
+        s.offset = wrap(s.offset);
+        const t = s.offset;
+        if (rowsEls[0]) rowsEls[0].style.transform = "translate3d(" + (-t).toFixed(2) + "px,0,0)";
+        if (rowsEls[1]) rowsEls[1].style.transform = "translate3d(" + (t - s.setW).toFixed(2) + "px,0,0)";
+      };
+      raf = requestAnimationFrame(frame);
+
+      /* --------------------------------------------------- pointer drag --- */
+      const down = (e) => {
+        if (e.pointerType === "mouse" && e.button !== 0) return;
+        s.dragging = true;
+        s.velocity = 0;
+        s.lastX = e.clientX;
+        s.lastT = performance.now();
+        vp.classList.add("is-dragging");
+        setInteracted(true);
+        try { vp.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+      };
+      const move = (e) => {
+        if (!s.dragging) return;
+        const dx = e.clientX - s.lastX;
+        const now = performance.now();
+        const dt = Math.max(1, now - s.lastT) / 1000;
+        s.offset = wrap(s.offset - dx);
+        s.velocity = Math.max(-2600, Math.min(2600, -dx / dt));
+        s.lastX = e.clientX;
+        s.lastT = now;
+      };
+      const up = () => {
+        if (!s.dragging) return;
+        s.dragging = false;
+        vp.classList.remove("is-dragging");
+      };
+
+      /* ------------------------------- horizontal trackpad / shift-wheel -- */
+      const wheel = (e) => {
+        const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
+        if (!dx) return;
+        s.offset = wrap(s.offset + dx);
+        s.velocity = 0;
+        setInteracted(true);
+        e.preventDefault();
+      };
+
+      const key = (e) => {
+        if (e.key === "ArrowRight") { s.offset = wrap(s.offset + 150); setInteracted(true); e.preventDefault(); }
+        else if (e.key === "ArrowLeft") { s.offset = wrap(s.offset - 150); setInteracted(true); e.preventDefault(); }
+      };
+
+      /* Pause only for a real mouse; touch pointers would risk a sticky pause. */
+      const enter = (e) => { if (e.pointerType === "mouse") s.paused = true; };
+      const leave = (e) => { if (e.pointerType === "mouse") s.paused = false; };
+
+      vp.addEventListener("pointerdown", down);
+      vp.addEventListener("pointermove", move);
+      vp.addEventListener("pointerup", up);
+      vp.addEventListener("pointercancel", up);
+      vp.addEventListener("wheel", wheel, { passive: false });
+      vp.addEventListener("keydown", key);
+      vp.addEventListener("pointerenter", enter);
+      vp.addEventListener("pointerleave", leave);
+
+      return () => {
+        cancelAnimationFrame(raf);
+        vp.removeEventListener("pointerdown", down);
+        vp.removeEventListener("pointermove", move);
+        vp.removeEventListener("pointerup", up);
+        vp.removeEventListener("pointercancel", up);
+        vp.removeEventListener("wheel", wheel);
+        vp.removeEventListener("keydown", key);
+        vp.removeEventListener("pointerenter", enter);
+        vp.removeEventListener("pointerleave", leave);
+        if (io) io.disconnect();
+        if (ro) ro.disconnect();
+        else window.removeEventListener("resize", measure);
+        if (mq.removeEventListener) mq.removeEventListener("change", onMq);
+        else if (mq.removeListener) mq.removeListener(onMq);
+      };
+    }, []);
+
+    const tile = (c, key, dup) => html`
+      <li class=${"client-tile client-tile--" + c.tone} key=${key} aria-hidden=${dup ? "true" : null}>
+        <img
+          src=${c.src}
+          alt=${dup ? "" : c.name}
+          width="212"
+          height="52"
+          draggable="false"
+          decoding="async"
+        />
+        <span class="client-tile__name">${c.name}</span>
+      </li>
+    `;
+
+    const row = (set, tag) => {
+      const out = [];
+      for (let c2 = 0; c2 < COPIES; c2++) {
+        set.forEach((it, i) => out.push(tile(it, tag + "-" + c2 + "-" + i, c2 > 0)));
+      }
+      return out;
+    };
+
+    return html`
+      <section class="clients" id="clients" aria-labelledby="clients-title">
+        <div class="shell">
+          <${SectionHead}
+            eyebrow="Trusted by"
+            title="The businesses we move freight for"
+            titleId="clients-title"
+            lede="Manufacturers, processors, exporters and distributors who rely on OSL capacity — spanning kaolin and minerals, steel, industrial gas, geosynthetics, agro-processing, cosmetics and consumer goods."
+            center=${true}
+            dark=${true}
+          />
+        </div>
+
+        <div class=${"clients__wall" + (interacted ? " is-interacted" : "")}>
+          <div
+            class="clients__viewport"
+            ref=${viewportRef}
+            role="region"
+            aria-label="Client logos — drag, scroll or swipe to explore"
+            tabindex="0"
+          >
+            <div class="clients__track" ref=${trackRef}>
+              <ul class="clients__row">${row(rowA, "a")}</ul>
+              <ul class="clients__row">${row(rowB, "b")}</ul>
+            </div>
+          </div>
+
+          <p class="clients__hint" aria-hidden="true">
+            <i class="fa-solid fa-hand-pointer"></i> Drag, scroll or swipe to explore
+          </p>
+        </div>
+      </section>
     `;
   }
 
@@ -926,6 +1160,7 @@
     ScrollProgress,
     Header,
     Hero,
+    Clients,
     Marquee,
     Services,
     Fleet,
