@@ -58,10 +58,10 @@ uppercase slabs, which is what gives the page a modern, premium feel.
 7. **Why Clients Choose OSL** — the six brand pillars from the client's posters.
 8. **How We Work** — four numbered steps plus two deep-dive columns on contracting and agency sourcing.
 9. **Network & Coverage** (dark) — lane description with a self-updating sample consignment panel, clearly labelled as illustrative.
-10. **FAQ** — accordion with seven answers (mirrored in FAQPage structured data).
+10. **FAQ** — accordion with six answers (mirrored in FAQPage structured data).
 11. **Brand** — the three original OSL posters, clickable to full size.
 12. **Point of Contact** — see below.
-13. **Footer** — full OSL logo lockup, services, quick links, contacts, GSTIN.
+13. **Footer** — full OSL logo lockup, services, quick links and contacts.
 
 ### Point of Contact — classified and grouped
 The section is deliberately **grouped by information category**, and each group is visually
@@ -70,10 +70,15 @@ which channel to use for what rather than being routed through the wrong line:
 
 | Group | Accent | Contains |
 | --- | --- | --- |
-| **Bookings, Pricing & Contracts** | Crimson | Transport booking line, WhatsApp desk, business-enquiries email, response window |
+| **Bookings, Pricing & Contracts** | Crimson | Transport booking line, WhatsApp desk, business-enquiries email |
 | **Operations, Dispatch & 24/7 Support** | Blue | Fleet & dispatch line, operations & support line, 24/7 support notice |
-| **Head Office** | Gold | Full postal address, visit note |
-| **Business & Statutory Details** | Slate | Proprietor, GSTIN, general-enquiries email |
+| **Head Office** | Gold | Full postal address, service area, visit note |
+| **Company Details** | Slate | Proprietor, business type, general-enquiries email |
+
+Each group holds exactly **three items**, and cards are equal-height **per row** (`align-items: stretch`
++ a per-card flex column) with the header note reserving two lines, so paired cards finish on the same
+baseline and their internal divider rules sit on a consistent rhythm. The grid stays two columns down
+to 960px before stacking on smaller screens.
 
 A closing CTA panel handles the "not sure which line to use" case, routing to the booking desk.
 
@@ -103,7 +108,7 @@ A closing CTA panel handles the "not sure which line to use" case, routing to th
 ### Structured data
 A single connected **`@graph`** (validated: 9 nodes, all `@id` references resolve) containing:
 `MovingCompany` + `LocalBusiness` + `Organization`, `WebSite`, `WebPage`, five `Service` nodes,
-an `OfferCatalog`, and a **`FAQPage`** with 7 Q&As that mirror the visible FAQ copy.
+an `OfferCatalog`, and a **`FAQPage`** with 6 Q&As that mirror the visible FAQ copy.
 
 ### Social / sharing
 Open Graph (`og:*` incl. image dimensions and alt) and Twitter `summary_large_image` cards.
@@ -113,7 +118,7 @@ Open Graph (`og:*` incl. image dimensions and alt) and Twitter `summary_large_im
 * `sitemap.xml` — landing URL with image sitemap entries for the three posters.
 * `manifest.webmanifest` — PWA metadata, theme colour and icon.
 * **`<noscript>` fallback** — because React renders client-side, a static block guarantees the core
-  services and full NAP (name, address, phone, GSTIN, email) data is present in the raw HTML for
+  services and full NAP (name, address, phone, email) data is present in the raw HTML for
   visitors without JavaScript and for crawlers that do not execute scripts.
 
 > **Action required by the site owner:** the absolute URLs use `https://www.omshivlogistics.com/`,
@@ -131,12 +136,13 @@ audited and deliberately constrained:
 | --- | --- |
 | "500+ vehicles" | **Kept** — stated by the client |
 | "10 tyres and above", 32FT SXL 9MT / MXL 18MT | **Kept** — from the client's own poster |
-| Address, three phone lines, both emails, GSTIN, proprietor | **Kept** — from the client's brief |
+| Address, three phone lines, both emails, proprietor | **Kept** — from the client's brief |
 | Freight **rates / price ranges** | **Removed.** The estimator was deleted on request; no figures are published. Pricing now speaks only of *structure* ("fixed structures", "cost per tonne") and always ends in "request a formal quotation". |
 | **Transit times** (e.g. "2–3 days") | **Removed** with the lanes table — they were illustrative and could be read as a delivery commitment. |
 | **Business hours** ("Mon–Sat 09:00–19:00") | **Removed.** Never supplied by the client; publishing invented opening hours risks misleading visitors and Google Business mismatches. |
 | **`priceRange: "$$"`** in structured data | **Removed.** Same reasoning as rates. |
-| **Response-time promises** | **Softened.** Earlier copy said "quick support"; the contact group now states plainly that enquiries are answered "during office hours", which is a factual expectation rather than a guarantee. |
+| **Response-time promises** | **Softened.** Earlier copy promised "quick support"; the contact section now makes no timing claim at all — the old "response window" item was removed rather than replaced with another invented expectation. |
+| **GSTIN / tax identifiers** | **Removed.** The GST number, its FAQ entry, the "Business & Statutory Details" heading (now **Company Details**) and the footer/noscript/structured-data references were deleted on request. No tax identifier is published. |
 | **Testimonials / client logos** | **Not added.** None were supplied; inventing them would be misrepresentation. |
 | **Certifications, awards, years in business, "ISO", "best in region"** | **Not added.** Not supplied and unverifiable. |
 | Coverage map and dispatch panel | The map is explicitly labelled an abstract network illustration, and the activity panel states it is an *illustrative sample, not a live consignment tracker*. |
@@ -228,7 +234,6 @@ The `.logo-mark` / `.logo-lockup` classes crop each to its exact artwork bounds 
 | General enquiries | contact@omshivlogistics.com |
 | Proprietor | Indradev Kushwaha (Fleet Owner) |
 | Registered office | North Flour Mill Building, Office No. 203, Zhanda Chowk, Gandhidham 370201, Kutch, Gujarat |
-| GSTIN | 24EGFPK8451Q1ZQ |
 | Fleet specialisation | 32FT SXL (9MT) / MXL (18MT) containers, 10 tyres & above |
 
 ---
@@ -252,13 +257,21 @@ The `.logo-mark` / `.logo-lockup` classes crop each to its exact artwork bounds 
 * **`PlaywrightConsoleCapture`** — zero console errors and zero page errors on `index.html`.
 * **Structured data** — programmatically parsed and validated: valid JSON, 9 nodes, correct types
   (`MovingCompany|LocalBusiness|Organization`, `WebSite`, `WebPage`, 5 × `Service`, `FAQPage`),
-  7 FAQ entries, **no unresolved `@id` references**, and confirmed absence of the invented
-  `openingHours` / `priceRange` claims.
+  6 FAQ entries, **no unresolved `@id` references**, and confirmed absence of the invented
+  `openingHours` / `priceRange` / `taxID` claims.
 * **Desktop (1280px)** — header on one line with logo, all nav items, phone and CTA; hero and map render.
 * **Mobile (390px)** — logo + hamburger and CTA on one line, no horizontal overflow, hero heading
   fits, sticky Call/WhatsApp/Contact bar present.
 * **New Sections** — visually confirmed: four industry cards, and **four visually distinct contact
   groups each with its own accent rail colour** (crimson, blue, gold, slate) plus a closing CTA panel.
+* **Contact-grid fix** — a full-page desktop capture (1280px) confirmed each row's two cards end on the
+  same bottom edge and their internal divider rules align; a mobile capture (390px) confirmed the grid
+  stacks to one readable column with no clipped or overflowing text. Card geometry was also measured
+  directly in the DOM (per-card heights and per-item offsets), not just eyeballed.
+* **GST removal** — grep across `index.html`, `js/`, `css/`, `robots.txt`, `sitemap.xml` and
+  `manifest.webmanifest` returns no `GSTIN` / `GST` / `24EGFPK8451` / `taxID` / `vatID` occurrences
+  (the only textual `gst` hit is `fonts.gstatic.com`, a false positive); the rendered page shows no
+  tax identifier.
 * **Removals** — confirmed the estimator, lanes table and enquiry form are absent from the page and
   that no stale `#enquiry` links, `estimator`/`lanes`/`EnquiryForm` references or table `fetch` calls
   remain in the application code.

@@ -860,14 +860,13 @@
               <li><a href=${"mailto:" + D.CONTACT.email}>${D.CONTACT.email}</a></li>
               <li>${D.CONTACT.address.line1}</li>
               <li>${D.CONTACT.address.line2}</li>
-              <li>GSTIN: ${D.CONTACT.gst}</li>
             </ul>
           </div>
         </div>
 
         <div class="footer-bottom">
           <span>© ${year} Om Shiv Logistics. All rights reserved.</span>
-          <span class="gst">Logistics · Connecting · Growth</span>
+          <span class="footer-motto">Logistics · Connecting · Growth</span>
           <span>Gandhidham · Kutch · Gujarat</span>
         </div>
       </div>

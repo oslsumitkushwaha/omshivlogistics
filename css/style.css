@@ -755,7 +755,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 22px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .contact-group {
@@ -768,6 +768,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   padding: 24px 24px 20px;
   overflow: hidden;
   transition: background 0.24s ease, border-color 0.24s ease;
+  display: flex;
+  flex-direction: column;
 }
 .contact-group::before {
   content: "";
@@ -801,14 +803,20 @@ ul { margin: 0; padding: 0; list-style: none; }
   color: #fff;
   letter-spacing: -0.01em;
 }
-.contact-group__note { color: #a9b8cc; font-size: 0.8rem; margin: 0; line-height: 1.5; }
+/* Reserve two lines so every header block is the same height; that keeps the
+   item dividers of the two cards in a row on the same horizontal rhythm. */
+.contact-group__note { color: #a9b8cc; font-size: 0.8rem; margin: 0; line-height: 1.5; min-height: 3em; }
 
-.contact-items { display: grid; }
+/* Items stretch to fill the card so paired cards finish on the same line
+   and the divider rules sit on a consistent rhythm. */
+.contact-items { display: flex; flex-direction: column; flex: 1; }
 .contact-item {
   display: grid;
+  align-content: start;
   gap: 3px;
   padding: 13px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex: 1;
 }
 .contact-item:first-child { border-top: 0; padding-top: 4px; }
 
@@ -888,7 +896,7 @@ a.contact-item__value:hover { color: var(--gold-soft); }
   padding-top: 24px;
   font-size: 0.78rem;
 }
-.footer-bottom .gst { color: #c3d0e0; font-weight: 600; letter-spacing: 0.06em; }
+.footer-bottom .footer-motto { color: #c3d0e0; font-weight: 600; letter-spacing: 0.06em; }
 
 /* ------------------------------------------------------------- floating --- */
 .float-actions {
@@ -1041,7 +1049,6 @@ a.contact-item__value:hover { color: var(--gold-soft); }
   .hero__badge { position: static; margin-top: 20px; max-width: none; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .two-col { grid-template-columns: 1fr; }
-  .contact-groups { grid-template-columns: 1fr; }
 
   /* collapse the desktop nav into a drawer */
   .main-nav {
@@ -1066,6 +1073,12 @@ a.contact-item__value:hover { color: var(--gold-soft); }
 
   .service-grid, .fleet-grid, .steps, .why-grid, .segment-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .step::after { display: none; }
+}
+
+@media (max-width: 960px) {
+  /* keep the classified contact grid as two readable columns well into
+     laptop/tablet-landscape widths; stack only when a pair would get cramped. */
+  .contact-groups { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 680px) {

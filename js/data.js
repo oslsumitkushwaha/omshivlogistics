@@ -18,7 +18,6 @@
     claim: "Your Cargo, Our Responsibility",
     owner: "Indradev Kushwaha",
     ownerRole: "Fleet Owner",
-    gst: "24EGFPK8451Q1ZQ",
     address: {
       line1: "North Flour Mill Building, Office No. 203",
       line2: "Zhanda Chowk, Gandhidham 370201",
@@ -38,6 +37,9 @@
   /* ------------------------------------------------------------------------
      POINT OF CONTACT — grouped by information category so a visitor can tell
      at a glance which channel to use for what.
+
+     Each group deliberately holds THREE items: with equal item counts the
+     four cards pair up into even rows, so no card is left short.
      -------------------------------------------------------------------- */
   const CONTACT_GROUPS = [
     {
@@ -45,7 +47,7 @@
       icon: "fa-file-invoice-dollar",
       accent: "crimson",
       title: "Bookings, Pricing & Contracts",
-      note: "Use these for new consignments, formal quotes and long-term transport contracts.",
+      note: "New consignments, formal quotes and long-term transport contracts.",
       items: [
         {
           kind: "phone",
@@ -66,12 +68,6 @@
           label: "Business Enquiries",
           value: "gandhidham@omshivlogistics.com",
           note: "Kutch operations inbox — quotes and documentation"
-        },
-        {
-          kind: "note",
-          label: "Response Window",
-          value: "New enquiries are answered during office hours",
-          note: "For anything already in transit, use the operations lines below"
         }
       ]
     },
@@ -120,6 +116,12 @@
         },
         {
           kind: "note",
+          label: "Service Area",
+          value: "Kutch, Gujarat and Pan India",
+          note: "Pickup and delivery across India through our network"
+        },
+        {
+          kind: "note",
           label: "Visits",
           value: "Please call ahead to confirm availability",
           note: "Site and warehouse visits can be arranged on request"
@@ -127,11 +129,11 @@
       ]
     },
     {
-      id: "statutory",
-      icon: "fa-file-shield",
+      id: "company",
+      icon: "fa-briefcase",
       accent: "slate",
-      title: "Business & Statutory Details",
-      note: "For vendor onboarding, purchase departments and accounts teams.",
+      title: "Company Details",
+      note: "For vendor onboarding teams and general correspondence.",
       items: [
         {
           kind: "person",
@@ -140,16 +142,16 @@
           note: "Fleet Owner"
         },
         {
-          kind: "gst",
-          label: "GSTIN",
-          value: "24EGFPK8451Q1ZQ",
-          note: "Compliant tax invoicing on all bookings"
+          kind: "person",
+          label: "Business Type",
+          value: "Business-to-business (B2B)",
+          note: "Fleet supply, transport contracting and commission agency"
         },
         {
           kind: "email",
           label: "General Enquiries",
           value: "contact@omshivlogistics.com",
-          note: "Corporate correspondence and billing"
+          note: "Corporate correspondence"
         }
       ]
     }
@@ -292,17 +294,10 @@
       a: "Pricing is built on lane distance, vehicle type, load weight and handling requirements — with load-layout planning to maximise space per truck and bring down cost per tonne. Share your lane and load details and we will revert with a formal quotation."
     },
     {
-      q: "Do you provide a GST invoice?",
-      a: "Yes. Om Shiv Logistics is GST registered (GSTIN 24EGFPK8451Q1ZQ) and issues compliant tax invoices for all bookings."
-    },
-    {
       q: "What do you need from us to quote?",
       a: "Origin and destination, material and approximate weight, vehicle or container size, preferred loading date, and any handling or documentation requirements. If you have drawings or packing lists, send them over WhatsApp and we will factor them in."
     }
   ];
-
-  /* Fleet specialisation, repeated where it matters — sourced from the client's own poster. */
-  const SPECIALISATION = "Fleet owner of 32FT SXL (9MT) / MXL (18MT) containers";
 
   window.OSL_DATA = {
     CONTACT: CONTACT,
@@ -315,7 +310,6 @@
     WHY: WHY,
     STEPS: STEPS,
     SEGMENTS: SEGMENTS,
-    FAQS: FAQS,
-    SPECIALISATION: SPECIALISATION
+    FAQS: FAQS
   };
 })();
