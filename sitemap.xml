@@ -1,28 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  XML sitemap for Om Shiv Logistics.
-  This is a single-page site; the anchor links below are listed as separate
-  <url> entries only for the primary landing page. Deep anchors are not
-  separate documents, so they are intentionally not listed individually.
-  Update <loc> if the live domain differs.
--->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.omshivlogistics.com/</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <image:image>
-      <image:loc>https://www.omshivlogistics.com/images/osl-pan-india-poster.png</image:loc>
-      <image:title>Om Shiv Logistics — Pan India presence and core services</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.omshivlogistics.com/images/osl-solutions-poster.png</image:loc>
-      <image:title>Om Shiv Logistics — complete logistics solutions for your business</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.omshivlogistics.com/images/osl-fleet-owner-poster.png</image:loc>
-      <image:title>Indradev Kushwaha, fleet owner of 32FT SXL and MXL containers, Gandhidham</image:title>
-    </image:image>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/services/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/services/container-booking-32ft/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/services/ftl-ptl-road-transport/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/services/commercial-vehicle-supply/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/services/transport-contracts/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/services/commission-agency/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/services/kandla-mundra-port-transport/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/contact/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/about/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/locations/gandhidham/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/locations/kutch/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/locations/mundra/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/locations/kandla/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/privacy-policy/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.omshivlogistics.com/terms/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>

@@ -26,7 +26,7 @@
         <${C.HowWeWork} />
         <${C.DispatchBoard} />
         <${C.Faq} />
-        <${C.Posters} />
+        <${C.Founder} />
         <${C.Contact} />
       <//>
     `;

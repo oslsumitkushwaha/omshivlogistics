@@ -1,334 +1,266 @@
-# OM SHIV LOGISTICS (OSL) — Landing Page
+# Om Shiv Logistics (OSL) — website
 
-A conversion-focused single-page React application for **Om Shiv Logistics**, a B2B commercial
-vehicle supplier, transport contractor and commission agency based in **Gandhidham, Kutch, Gujarat**.
+B2B fleet owner and transport contractor based in **Gandhidham, Kutch, Gujarat, India**.
+Tagline: *Transportation Redefined — Your Cargo, Our Responsibility.*
 
-> **Transportation Redefined — Your Cargo, Our Responsibility**
-
----
-
-## 1. Project goals
-
-| Goal | How it is addressed |
-| --- | --- |
-| Attract B2B clients | Clear service taxonomy, industry language, capacity figures, factual copy |
-| Boost enquiries | Persistent Call/WhatsApp CTAs, classified contact section, sticky mobile action bar |
-| Look premium, not template-generated | Midnight-navy / crimson / gold palette, Sora + Inter typography, real OSL logo artwork, restrained motion |
-| Rank for local search | Keyword-led title, geo meta, connected JSON-LD graph, robots.txt, sitemap.xml, noscript fallback |
-| Correct routing of enquiries | Contacts grouped by information category so visitors reach the right desk first time |
+OSL supplies commercial vehicles and runs industrial road freight. It is **not** a consumer
+moving company and the site does not offer household relocation.
 
 ---
 
-## 2. Tech stack
+## 1. Public URLs
 
-* **React 18 + htm** — vendored locally in `js/vendor/`, so the app runs with **no build step** and no
-  external JS dependency. JSX-free tagged template literals keep the markup readable.
-* **Plain CSS** (`css/style.css`) with CSS custom properties — no framework payload.
-* **Sora** (display) + **Inter** (body) via Google Fonts, **Font Awesome 6** for icons — progressive
-  enhancements; the page still works without them.
-* **Static site** — no backend, no server-side processing. See *Limitations* below.
+| Item | URL |
+|---|---|
+| Canonical / production | `https://www.omshivlogistics.com/` |
+| Alternate host (301 to www + https) | `http://omshivlogistics.com/` |
+| Sitemap | `https://www.omshivlogistics.com/sitemap.xml` |
+| Robots | `https://www.omshivlogistics.com/robots.txt` |
+| Google Maps listing | `https://maps.app.goo.gl/fv4qFBzDQcibUEKcA` |
+| GA4 measurement ID | `G-4H9SDR2W89` |
 
----
+> The domain is derived from the business email domain and was supplied in the brief. If the
+> live domain differs, every absolute URL below must be updated in one pass —
+> see section 7, "Find and replace".
 
-## 3. Design system
+## 2. How the site is built
 
-| Token | Value | Use |
-| --- | --- | --- |
-| Midnight navy | `#050d18` → `#0a1626` → `#16304f` | Dark sections, header, footer |
-| Brand crimson | `#e4002b` | Primary actions, accents, active states |
-| Warm gold | `#e9b949` | Premium accent, dark-section figures, eyebrows |
-| Mist / line | `#f2f5fa` / `#e4e9f2` | Light section backgrounds, borders |
-| Display font | Sora | Headings, buttons, nav, numbers |
-| Body font | Inter | Paragraphs, form fields, tables |
+Two kinds of page, one design system.
 
-Headings use tight negative tracking and a restrained weight scale (600–800) rather than heavy
-uppercase slabs, which is what gives the page a modern, premium feel.
+| | Landing page | Inner pages |
+|---|---|---|
+| File | `index.html` | `services/…`, `locations/…`, `about/`, `contact/`, `privacy-policy/`, `terms/`, `404.html` |
+| Rendering | React 18 + `htm` (UMD, vendored in `js/vendor/`, **no build step**) | plain static HTML + `js/page-render.js` (no framework) |
+| Content source | `js/data.js` (`window.OSL_DATA`) | `js/pages.js` (`window.OSL_PAGES`) |
+| Markup | `js/components.js` (`window.OSL_COMPONENTS`) | rendered into `#page-main` from the page registry |
+| Styles | `css/style.css` | `css/style.css` + `css/pages.css` |
 
----
+The inner pages need no framework at all, so each is a real document with its own `<title>`,
+description, canonical and `<noscript>` body — fully crawlable without executing JavaScript.
+The landing page stays on React because the interactive client wall depends on it, and it is
+backed by a `<noscript>` block carrying the same NAP facts.
 
-## 4. Completed features
+### Why no build step
+Everything is loaded from `js/vendor/` as plain `<script>` tags. Editing a file and reloading is
+the whole workflow. Keep it that way unless there is a reason not to.
 
-### Sections (in page order)
-1. **Sticky header** — OSL logo mark, single-line scroll-spy nav (Services · Fleet · Process · FAQ · Contact), booking phone, "Get a Quote" CTA, mobile drawer.
-2. **Hero** — headline with gradient accent, location chip, two CTAs, four KPI stats, and an **animated pan-India network map** (SVG) with Gandhidham as the hub.
-3. **Client wall — "Trusted by"** (dark) — **two counter-scrolling rows** of the client's own logos, immediately below the hero. See below.
-4. **Crimson marquee band** — scrolling core-service ticker (pauses on hover).
-5. **Core Services** — **four consolidated pillars in one row**, each absorbing the client's original six specialisations.
-6. **Fleet Ownership** (dark) — **four consolidated vehicle groups in one row** plus a stat band.
-7. **Who We Work With** — four client-industry cards (manufacturing, extraction, distribution, port-linked).
-8. **Why Clients Choose OSL** — the six brand pillars from the client's posters.
-9. **How We Work** — four numbered steps plus two deep-dive columns on contracting and agency sourcing.
-10. **Network & Coverage** (dark) — lane description with a self-updating sample consignment panel, clearly labelled as illustrative.
-11. **FAQ** — accordion with six answers (mirrored in FAQPage structured data).
-12. **Brand** — the three original OSL posters, clickable to full size.
-13. **Point of Contact** — see below.
-14. **Footer** — full OSL logo lockup, services, quick links and contacts.
-
-### Client wall — placement, motion and logo legibility
-The wall sits **directly under the hero**, on a dark band, so social proof lands before the visitor reads
-the service detail — the strongest position on the page for it. Two rows of tiles drift in **opposite
-directions** (the top row left, the bottom row right) inside one `requestAnimationFrame` loop that owns
-both rows' positions, so ambient motion, drag, fling momentum and the hover pause can never fight each
-other. It can be explored by **drag, horizontal trackpad/shift-wheel, arrow keys, or swipe**, and it
-**never hijacks vertical page scroll** (the viewport uses `touch-action: pan-y`).
-
-**Each logo is shown exactly as supplied — nothing is redrawn, recoloured or inverted.** The tiles are
-not a uniform colour, because the twelve supplied files are not uniform. Their backgrounds were measured
-from the actual pixels:
-
-| Background of the supplied file | Tone used | Count | Treatment |
-| --- | --- | --- | --- |
-| Transparent, dark artwork, **or** baked-in **white** plate | `light` | 9 | White tile, `mix-blend-mode: multiply` |
-| Baked-in **black** plate | `dark` | 3 | Navy tile, `mix-blend-mode: screen` |
-
-The blend mode dissolves each file's baked-in plate into its tile, so no logo prints as a stray white or
-black rectangle. This was tested empirically: a single uniform treatment left the three black-background
-marks (Karamtara, Marvellite, SKAPS) sitting on visible black boxes, and an `invert()`/`hue-rotate()` fix
-**distorted their brand colours** — rejected. The per-logo tone approach keeps every mark legible in its
-true colours. `tone` lives beside each entry in `CLIENTS` (`js/data.js`).
-
-The section also respects `prefers-reduced-motion` (ambient drift stops; manual drag still works) and
-only animates while on screen.
-
-### Point of Contact — classified and grouped
-The section is deliberately **grouped by information category**, and each group is visually
-distinct (its own accent rail colour, tinted icon and header) so a visitor can tell at a glance
-which channel to use for what rather than being routed through the wrong line:
-
-| Group | Accent | Contains |
-| --- | --- | --- |
-| **Bookings, Pricing & Contracts** | Crimson | Transport booking line, WhatsApp desk, business-enquiries email |
-| **Operations, Dispatch & 24/7 Support** | Blue | Fleet & dispatch line, operations & support line, 24/7 support notice |
-| **Head Office** | Gold | Full postal address, service area, visit note |
-| **Company Details** | Slate | Proprietor, business type, general-enquiries email |
-
-Each group holds exactly **three items**, and cards are equal-height **per row** (`align-items: stretch`
-+ a per-card flex column) with the header note reserving two lines, so paired cards finish on the same
-baseline and their internal divider rules sit on a consistent rhythm. The grid stays two columns down
-to 960px before stacking on smaller screens.
-
-A closing CTA panel handles the "not sure which line to use" case, routing to the booking desk.
-
-### Global UX
-* Scroll progress bar, reveal-on-scroll animations, `prefers-reduced-motion` respected.
-* Floating WhatsApp / Call / Back-to-top buttons; sticky mobile action bar (Call / WhatsApp / Contact).
-* Accessibility: skip link, `aria-labelledby` on contact groups, `aria-expanded` on the FAQ and nav,
-  focus-visible rings, labelled interactive elements, semantic `section`/`address`/`dl` landmarks.
-* Graceful failure: a `try/catch` render guard shows a plain-text contact block if React fails to mount.
-
----
-
-## 5. SEO implementation
-
-### On-page
-* **Keyword-led title and description** targeting *transport contractor Gandhidham*, *fleet owner Kutch*,
-  *container booking Gandhidham*, *FTL/PTL road transport Gujarat*, *Kandla/Mundra port transport*.
-* **Semantic HTML** — `header`, `main`, `footer`, `section`, `nav`, `address`, plus heading hierarchy
-  with a single `h1`.
-* **Descriptive alt text** on every image, `width`/`height` attributes to prevent layout shift.
-* **`lang="en-IN"`** and `format-detection` for click-to-call.
-
-### Local / geo signals
-`geo.region`, `geo.placename`, `geo.position`, `ICBM` and `business:contact_data:*` meta tags, plus a
-`hasMap` link in structured data — all consistent with the registered Gandhidham address.
-
-### Structured data
-A single connected **`@graph`** (validated: 9 nodes, all `@id` references resolve) containing:
-`MovingCompany` + `LocalBusiness` + `Organization`, `WebSite`, `WebPage`, five `Service` nodes,
-an `OfferCatalog`, and a **`FAQPage`** with 6 Q&As that mirror the visible FAQ copy.
-
-### Social / sharing
-Open Graph (`og:*` incl. image dimensions and alt) and Twitter `summary_large_image` cards.
-
-### Crawl & indexing files
-* `robots.txt` — allows the site, disallows `/js/`, points to the sitemap.
-* `sitemap.xml` — landing URL with image sitemap entries for the three posters.
-* `manifest.webmanifest` — PWA metadata, theme colour and icon.
-* **`<noscript>` fallback** — because React renders client-side, a static block guarantees the core
-  services and full NAP (name, address, phone, email) data is present in the raw HTML for
-  visitors without JavaScript and for crawlers that do not execute scripts.
-
-> **Action required by the site owner:** the absolute URLs use `https://www.omshivlogistics.com/`,
-> inferred from the business email domain. If the live domain differs, update `canonical`, `og:url`,
-> `og:image`, `twitter:image` in `index.html`, plus `robots.txt` and `sitemap.xml`.
-
----
-
-## 6. Content integrity (client-facing limitation audit)
-
-Because unverifiable claims create real commercial and legal risk for the client, the copy was
-audited and deliberately constrained:
-
-| Kind of claim | Decision |
-| --- | --- |
-| "500+ vehicles" | **Kept** — stated by the client |
-| "10 tyres and above", 32FT SXL 9MT / MXL 18MT | **Kept** — from the client's own poster |
-| Address, three phone lines, both emails, proprietor | **Kept** — from the client's brief |
-| Freight **rates / price ranges** | **Removed.** The estimator was deleted on request; no figures are published. Pricing now speaks only of *structure* ("fixed structures", "cost per tonne") and always ends in "request a formal quotation". |
-| **Transit times** (e.g. "2–3 days") | **Removed** with the lanes table — they were illustrative and could be read as a delivery commitment. |
-| **Business hours** ("Mon–Sat 09:00–19:00") | **Removed.** Never supplied by the client; publishing invented opening hours risks misleading visitors and Google Business mismatches. |
-| **`priceRange: "$$"`** in structured data | **Removed.** Same reasoning as rates. |
-| **Response-time promises** | **Softened.** Earlier copy promised "quick support"; the contact section now makes no timing claim at all — the old "response window" item was removed rather than replaced with another invented expectation. |
-| **GSTIN / tax identifiers** | **Removed.** The GST number, its FAQ entry, the "Business & Statutory Details" heading (now **Company Details**) and the footer/noscript/structured-data references were deleted on request. No tax identifier is published. |
-| **Testimonials / client logos** | **Not added.** None were supplied; inventing them would be misrepresentation. |
-| **Certifications, awards, years in business, "ISO", "best in region"** | **Not added.** Not supplied and unverifiable. |
-| Coverage map and dispatch panel | The map is explicitly labelled an abstract network illustration, and the activity panel states it is an *illustrative sample, not a live consignment tracker*. |
-
-### Remaining limitations to be aware of
-1. **No published pricing.** Visitors cannot self-serve a cost estimate; every enquiry requires a
-   phone call or WhatsApp. This is honest but adds friction — consider adding a *rate-card PDF* or a
-   "typical lane pricing on request" note if the client is comfortable.
-2. **No form on the page.** Removed on request, so there is no asynchronous contact channel — only
-   phone, WhatsApp and email. For B2B buyers who browse after hours, an email is the only
-   non-interactive option.
-3. **The coverage map is illustrative, not a lane guarantee.** If the client wants to advertise
-   specific lanes, those must be confirmed and would need a disclaimer.
-4. **No client proof (testimonials/logos).** This is the single biggest missing trust signal for a
-   B2B freight buyer. Recommend collecting 2–3 named references.
-5. **Illustrative dispatch panel could still be misread** as live tracking. It is labelled twice, but
-   removing it entirely is the safest option if the client prefers zero ambiguity.
-6. **Client-side rendering.** Content is injected by React; the `<noscript>` block mitigates this, but
-   server-side rendering or static pre-rendering would be strictly better for indexing robustness.
-7. **No analytics installed**, so enquiry sources cannot be measured.
-
----
-
-## 7. Functional entry URIs
-
-| Path | Purpose |
-| --- | --- |
-| `/index.html` | The entire landing page (single page, anchor navigation) |
-| `/#clients` | Client wall — "Trusted by" logo rows |
-| `/#services` | Core Services |
-| `/#fleet` | Fleet ownership & vehicle classes |
-| `/#industries` | Who we work with |
-| `/#how-we-work` | Process, contracting & commission agency detail |
-| `/#network` | Network & coverage |
-| `/#faq` | FAQ accordion |
-| `/#posters` | Brand creatives |
-| `/#contact` | Classified point of contact |
-
-### Removed on request
-The `#estimator`, `#lanes` and `#enquiry` sections, their components, and the `lanes` /
-`inquiries` API integrations were deleted. The legacy table schemas remain defined in
-`.tables/schema.json` but are no longer referenced by the application.
-
----
-
-## 8. Project structure
+## 3. Assets
 
 ```
-index.html            page shell, full SEO head, JSON-LD graph, noscript fallback
-robots.txt            crawl directives
-sitemap.xml           XML sitemap with image entries
-manifest.webmanifest  PWA metadata
-css/style.css         full brand theme, layout, animations, responsive rules
-js/data.js            all content: contacts & contact groups, services, fleet, FAQs, clients
-js/components.js      React components (React 18 + htm)
-js/app.js             entry point; mounts the React tree
-js/vendor/            react, react-dom, htm (local copies, no build step)
-images/               OSL logo artwork + the three brand posters
-images/clients/       12 client logos shown in the "Trusted by" wall
+css/
+  style.css          brand tokens, header/footer, hero, landing sections, responsive
+  pages.css          inner-page only: hero band, breadcrumbs, prose, cards, FAQ,
+                     contact stack, lazy map facade, quote form, TODO notes
+js/
+  vendor/            react.production.min.js, react-dom.production.min.js, htm.umd.js
+  data.js            landing-page content + contacts + SERVICE_PAGES/CITY_PAGES/COMPANY_PAGES
+  pages.js           registry for every inner page (title, description, breadcrumb, blocks)
+  page-render.js     renders an inner page from the registry; nav, map facade, quote form
+  components.js      landing-page React components
+  app.js             mounts the React tree
+  analytics.js       GA4 delegated event layer (every page)
+images/
+  osl-logo-mark.png      white wordmark, dark header/footer
+  osl-logo-full.png      full lockup, footer
+  osl-logo-square.jpg    square black-on-white mark → favicon + schema logo
+  osl-icon.png           square icon on white plate (apple-touch / manifest)
+  og-om-shiv-logistics.jpg   social share banner
+  founder-indradev-kushwaha.jpg
+  clients/               12 client logos
 ```
 
-To edit copy or contacts, change **`js/data.js` only** — no component edits needed.
+### Logo cropping
+The supplied logo PNGs are 1024² with ~90% transparent padding. `.logo-mark` / `.logo-lockup`
+in `css/style.css` crop them with measured `overflow:hidden` windows
+(910×237 @64,388 and 848×280 @91,407). If the artwork is ever re-exported, re-measure.
 
----
+### Client logo tiles
+`images/clients/*` carry differing backgrounds — some transparent, some with baked-in white,
+some with baked-in black. Each entry in `CLIENTS` (js/data.js) therefore has a `tone`:
+`"light"` → white tile + `mix-blend-mode: multiply`; `"dark"` → navy tile + `screen`.
+A single uniform tile makes three of the twelve logos invisible.
 
-## 9. Brand assets
+## 4. Functional entry URIs
 
-| File | Use |
-| --- | --- |
-| `images/osl-logo-mark.png` | Header logo (OSL letters) and favicon |
-| `images/osl-logo-full.png` | Footer logo lockup (OSL + name + tagline) |
-| `images/osl-pan-india-poster.png` | Brand section creative |
-| `images/osl-solutions-poster.png` | Brand section creative |
-| `images/osl-fleet-owner-poster.png` | Brand section creative |
+### Landing page (single HTML file, in-page anchors)
+| URI | Section |
+|---|---|
+| `/#top` | Hero |
+| `/#clients` | Trusted-by client wall |
+| `/#services` | Services |
+| `/#fleet` | Fleet |
+| `/#industries` | Segments / industries served |
+| `/#why` | Why OSL |
+| `/#how-we-work` | Process |
+| `/#faq` | FAQ |
+| `/#founder` | Leadership — Indradev Kushwaha |
+| `/#contact` | Point of contact |
 
-### Client logos (`images/clients/`)
-Twelve client logos are shown in the "Trusted by" wall, each exactly as supplied:
+### Inner pages (real URLs)
+| Path | Purpose | JSON-LD |
+|---|---|---|
+| `/services/` | Services hub | CollectionPage + BreadcrumbList |
+| `/services/container-booking-32ft/` | 32FT SXL 9MT / MXL 18MT | Service + FAQPage + BreadcrumbList |
+| `/services/ftl-ptl-road-transport/` | FTL & PTL | Service + BreadcrumbList |
+| `/services/commercial-vehicle-supply/` | Vehicle supply | Service + BreadcrumbList |
+| `/services/transport-contracts/` | Long-term contracts | Service + BreadcrumbList |
+| `/services/commission-agency/` | Agency & sourcing | Service + BreadcrumbList |
+| `/services/kandla-mundra-port-transport/` | Port movement | Service + BreadcrumbList |
+| `/locations/gandhidham/` | City page | Service + BreadcrumbList |
+| `/locations/kutch/` | District page | Service + BreadcrumbList |
+| `/locations/mundra/` | City page | Service + BreadcrumbList |
+| `/locations/kandla/` | City page | Service + BreadcrumbList |
+| `/about/` | About OSL | AboutPage + BreadcrumbList |
+| `/contact/` | All contacts, map, quote form | ContactPage + BreadcrumbList |
+| `/privacy-policy/` | Analytics + cookies | WebPage + BreadcrumbList |
+| `/terms/` | Website & quotation terms | WebPage + BreadcrumbList |
+| `/404.html` | Not found | WebPage + BreadcrumbList (noindex) |
 
-| Company | File | Tile tone |
-| --- | --- | --- |
-| HD Microns Limited | `hd-microns.png` | light |
-| N. K. Proteins Pvt. Ltd. | `nk-proteins.png` | light |
-| Rama Cylinders | `rama-cylinders.png` | light |
-| Diab | `diab.jpg` | light |
-| Aeroplast | `aeroplast.png` | light |
-| Karamtara | `karamtara.jpg` | dark |
-| Marvellite | `marvellite.jpg` | dark |
-| Strata Geosystems (India) Pvt. Ltd. | `strata.jpg` | light |
-| Ambica Steels Limited | `ambica-steels.jpg` | light |
-| Zetts Cosmetics | `zetts.jpg` | light |
-| Everest Kanto Cylinder Limited | `ekc.png` | light |
-| SKAPS | `skaps.png` | dark |
+The `#quote` anchor at the end of `/contact/` points at the quote form.
 
-> **Action required by the site owner:** these are third-party trademarks. Please confirm you hold
-> permission to display each client's mark publicly before publishing, and double-check the exact legal
-> names and any "Pvt. Ltd." / "Limited" wording. Two names in particular are worth verifying: the
-> gas-cylinder mark was read as **Rama Cylinders**, and **Ambica Steels Limited** is the logo's own
-> strapline text. If a client prefers not to be listed, delete its row from `CLIENTS` in `js/data.js` —
-> the wall re-flows automatically (the rows are rebuilt from the array, so an empty array renders
-> nothing and the section can be removed from `js/app.js` entirely).
+## 5. Data models and storage
 
-**Important:** the supplied logo PNGs are 1024×1024 files whose artwork occupies only a narrow
-horizontal band (measured bounds: mark = 910×237 at x64,y388; full lockup = 848×280 at x91,y407).
-The `.logo-mark` / `.logo-lockup` classes crop each to its exact artwork bounds via a scaled
-`overflow: hidden` window. If a logo is replaced, re-measure and update those two rule sets.
+**Enquiries table — `inquiries`** (`.tables/schema.json`). The quote form on `/contact/` POSTs
+to `/tables/inquiries` and falls back to a `mailto:` to `gandhidham@omshivlogistics.com` if the
+API is unreachable, so a lead is never silently lost.
 
----
+Fields: `id`, `reference` (e.g. `OSL-20261001-4821`), `name`, `company`, `phone`, `email`,
+`service`, `vehicle`, `from_city`, `to_city`, `load_details`, `pickup_date`, `message`,
+`source`, `status` (`new`/`contacted`/`quoted`/`won`/`closed`), `created_at`.
 
-## 10. Business details configured
+Spam controls: a hidden honeypot field (`company_url`) plus a 2.5-second minimum time-on-form
+trap. Both fail silently to a plausible success state so bots learn nothing.
 
-| Field | Value |
-| --- | --- |
-| Transport Booking | +91 93745 29413 |
-| Fleet & Dispatch | +91 93744 29413 |
-| Operations & Support | +91 92740 47949 |
-| Business enquiries | gandhidham@omshivlogistics.com |
-| General enquiries | contact@omshivlogistics.com |
-| Proprietor | Indradev Kushwaha (Fleet Owner) |
-| Registered office | North Flour Mill Building, Office No. 203, Zhanda Chowk, Gandhidham 370201, Kutch, Gujarat |
-| Fleet specialisation | 32FT SXL (9MT) / MXL (18MT) containers, 10 tyres & above |
+**Preview vs live data.** Two separate stores, never auto-synced:
+* preview store — rows added via the Data tab / `TableDataAdd`, served by the in-editor preview
+  and the `*.gensparkspace.com` quick-share site;
+* live hosted database — created empty at Hosted Deploy time, written by real visitors.
 
----
+If a deployed site shows no data while the editor has rows, that is why. To copy preview rows
+into the live database, use the sync-from-preview tooling — do **not** re-key rows by hand.
 
-## 11. Recommended next steps
+Legacy `lanes` schema remains in `.tables/schema.json` and is unreferenced by the app.
 
-1. **Confirm the live domain** and update the absolute URLs listed in §5.
-2. **Register Google Business Profile** with the exact NAP used here — highest-impact local SEO action.
-3. **Add trust signals** — 2–3 named client references or logo permissions (currently absent).
-4. **Reintroduce a contact form** if the client wants an after-hours channel; a form-relay service
-   (Formspree, Web3Forms, EmailJS) is required because a static site cannot send SMTP mail itself.
-5. **Server-side rendering or pre-rendering** for fully crawler-proof indexing.
-6. **Gujarati / Hindi version** with `hreflang`, valuable for the local Kutch market.
-7. **Google Maps embed** for the Zhanda Chowk office.
-8. **GA4 + click-to-call tracking** to measure enquiry sources.
+## 6. Analytics
 
----
+`G-4H9SDR2W89` appears **exactly once per page**, immediately after the opening `<head>`, in all
+17 HTML files. It is never deferred, never duplicated, never inlined twice.
 
-## 12. Verification performed
+`js/analytics.js` adds a delegated click layer so React-mounted elements are covered without
+re-binding:
 
-* **`PlaywrightConsoleCapture`** — zero console errors and zero page errors on `index.html`.
-* **Structured data** — programmatically parsed and validated: valid JSON, 9 nodes, correct types
-  (`MovingCompany|LocalBusiness|Organization`, `WebSite`, `WebPage`, 5 × `Service`, `FAQPage`),
-  6 FAQ entries, **no unresolved `@id` references**, and confirmed absence of the invented
-  `openingHours` / `priceRange` / `taxID` claims.
-* **Desktop (1280px)** — header on one line with logo, all nav items, phone and CTA; hero and map render.
-* **Mobile (390px)** — logo + hamburger and CTA on one line, no horizontal overflow, hero heading
-  fits, sticky Call/WhatsApp/Contact bar present.
-* **New Sections** — visually confirmed: four industry cards, and **four visually distinct contact
-  groups each with its own accent rail colour** (crimson, blue, gold, slate) plus a closing CTA panel.
-* **Contact-grid fix** — a full-page desktop capture (1280px) confirmed each row's two cards end on the
-  same bottom edge and their internal divider rules align; a mobile capture (390px) confirmed the grid
-  stacks to one readable column with no clipped or overflowing text. Card geometry was also measured
-  directly in the DOM (per-card heights and per-item offsets), not just eyeballed.
-* **GST removal** — grep across `index.html`, `js/`, `css/`, `robots.txt`, `sitemap.xml` and
-  `manifest.webmanifest` returns no `GSTIN` / `GST` / `24EGFPK8451` / `taxID` / `vatID` occurrences
-  (the only textual `gst` hit is `fonts.gstatic.com`, a false positive); the rendered page shows no
-  tax identifier.
-* **Removals** — confirmed the estimator, lanes table and enquiry form are absent from the page and
-  that no stale `#enquiry` links, `estimator`/`lanes`/`EnquiryForm` references or table `fetch` calls
-  remain in the application code.
-* **Entity safety** — no literal `&amp;` leaks on screen (htm renders HTML entities verbatim, so copy
-  avoids them).
+| Event | Fires on | Parameter |
+|---|---|---|
+| `call_click` | any `tel:` link (all three lines) | `phone_number`, `link_url`, `link_text` |
+| `email_click` | any `mailto:` link (both inboxes) | `email_address`, `link_url`, `link_text` |
+| `whatsapp_click` | any `wa.me` link | `whatsapp_number`, `link_url`, `link_text` |
+| `directions_click` | any Google Maps link / Get Directions | `link_url`, `link_text` |
+| `generate_lead` | successful quote-form submit | `lead_source`, `delivery_method`, `service_requested`, `has_company`, `has_email` |
+| `view_map` | contact-page map facade opened | `link_url`, `link_text` |
+| `page_view` | real page loads (from gtag config); hash routes `#/…` if ever added | `page_path`, `page_location`, `page_title` |
+
+`generate_lead` deliberately never carries the enquirer's name, phone or email.
+
+## 7. SEO implementation notes
+
+* **Title / description.** Unique per page. Homepage title is 54 chars and its description 148 —
+  both under the truncation limits. `og:*` and `twitter:*` mirror them.
+* **Robots.** `/robots.txt` allows everything except `/admin/` and `/api/`. CSS, JS and images
+  are **not** blocked — on a React-rendered page, blocking JS stops rendering entirely.
+* **Sitemap.** `/sitemap.xml`, 15 indexable URLs, `<lastmod>2026-10-01</lastmod>`,
+  priority 1.0 home / 0.8 service + contact / 0.6 city + about / 0.3 policies. The 404 page is
+  excluded (correctly — a 404 in a sitemap is a Search Console error).
+* **Structured data.** Homepage carries a connected `@graph`:
+  `["ProfessionalService","LocalBusiness","Organization"]` + `WebSite` (with
+  `name` / `alternateName: "OSL"`) + `WebPage` + 5×`Service` + `OfferCatalog` + `FAQPage`.
+  Inner pages carry `Service` / `WebPage` / `AboutPage` / `ContactPage` + `BreadcrumbList`, and
+  container/FAQ pages add their own `FAQPage`.
+* `hasMap` and `sameAs` both point at the Maps listing. No `Review` or `AggregateRating` anywhere
+  — there are no real reviews displayed on the site, so such markup would be a policy violation.
+* `openingHours`, `priceRange` and other `sameAs` profiles are **absent** because nothing on the
+  site substantiates them. See section 9.
+
+### Find and replace
+If the domain changes, replace `https://www.omshivlogistics.com` across:
+`index.html`, `sitemap.xml`, `robots.txt`, all 15 inner-page HTML files, and
+`js/pages.js` (`SITE`).
+
+## 8. Performance and accessibility notes
+
+Done: root-relative-inner-page assets so previews and production agree; explicit `width`/`height`
+on every `<img>`; `loading="lazy" decoding="async"` on below-fold images; the founder portrait
+declared at 768×1024; the client wall driven by a single `requestAnimationFrame` loop that pauses
+off-screen and honours `prefers-reduced-motion`; the Google Map behind a click-to-load facade with
+a reserved `aspect-ratio` box (no CLS); inline SVG instead of icon fonts on inner pages; two font
+families, three weights each; `theme-color #0a1626`; 48px minimum tap targets on inner-page chrome;
+visible `:focus-visible` outlines; labelled form fields; `aria-label` on every icon-only control
+including Get Directions.
+
+Fonts are still loaded from Google Fonts (self-hosting WOFF2 was out of tooling reach here) and
+the landing page still uses the Font Awesome CDN. Both are candidates for the next pass.
+
+## 9. Missing information — the owner must supply
+
+Recorded as visible TODO notes on the affected pages and as `<!-- TODO -->` comments in the HTML.
+
+1. **Office opening hours** — no `openingHours` is published. `/contact/` shows a TODO. The
+   24/7 claim covers the support lines only.
+2. **WhatsApp number** — a click-to-chat link uses `+91 93745 29413` because that is the
+   published booking line. Confirm it is monitored on WhatsApp or it will be removed.
+3. **Founding year, GST / transport registration numbers, certifications** — none published.
+   `/about/` shows a TODO. Trust signals are limited to what is verifiable ("500+ vehicles").
+4. **Legal review** of `/privacy-policy/` and `/terms/` — both describe the site's actual
+   behaviour but are not legal advice. Registered entity name and governing law may be wanted.
+5. **Google Maps listing vs site NAP** — `https://maps.app.goo.gl/fv4qFBzDQcibUEKcA` could **not**
+   be verified. The short URL returns only an HTTP 302 and the fetcher refuses redirects, so the
+   place name behind it is unknown. Please open it and confirm the place name matches
+   "Om Shiv Logistics" and the address matches
+   *North Flour Mill Building, Office No. 203, Zhanda Chowk, Gandhidham 370201, Kutch, Gujarat*
+   at `23.075297, 70.133705`. **This link also differs from `fRJyybhwDt4MJUk1A`, which was
+   supplied earlier**; the newer one is used throughout. Confirm which is canonical.
+6. **1200×630 social image** — `images/og-om-shiv-logistics.jpg` is 1360×768 (a 1.77:1 banner),
+   not the specified 1.91:1. A correctly proportioned asset should be produced.
+7. **`/favicon.ico` + 48/96/192 PNGs** — not created; no image tooling was available. See the
+   TODO in `index.html` for the exact lines to add once the files exist. **Nothing references them
+   yet, so there is no 404 today.**
+8. **16px favicon legibility** — the mark is the three letters *OSL* in a heavy condensed italic,
+   with a wide ≈2.5:1 proportion and fine internal gaps. At 16px those gaps close up. A simplified
+   mark (a single letter, or a solid monogram) is recommended for the favicon specifically.
+9. **`openingHours`, `priceRange`, social profiles** — add only if genuine.
+
+## 10. Not yet done, and why
+
+* **WebP/AVIF conversion and resizing** — no image-processing tooling is available in this
+  environment. Raster assets ship as supplied. Filenames were not renamed to the
+  `32ft-container-transport-gandhidham.webp` convention because a rename without a conversion
+  would be cosmetic only; it should happen together with the conversion.
+* **Hero slider → single static image** — already satisfied: the hero is a static CSS-gradient band
+  with an inline SVG network map. There is no slider anywhere on the site.
+* **Self-hosted WOFF2 fonts with preload** — still on Google Fonts.
+* **Critical-CSS inlining / full minification** — the stylesheet is hand-written and readable;
+  a minify pass belongs in a build step, and this project deliberately has none.
+* **Security headers (HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy) and
+  `/.well-known/security.txt`** — these are response-header and file-host concerns that a static
+  repo cannot set. They must be configured at the host/CDN. `/.well-known/security.txt` can be
+  added once a security contact address is confirmed.
+* **Single-hop 301 http→https and non-www→www** — must be configured at the host; it cannot be
+  expressed in the project files.
+* **A cookie-consent banner** — `/privacy-policy/` documents the analytics cookies, but no consent
+  UI was added. GA4 loads unconditionally, as the brief's Part 1 requires the tag never be delayed.
+  These two requirements conflict; the tag was given priority. A consent mode needs a decision.
+* **Server-side form delivery** — a static site cannot send email. The form therefore persists to
+  the `inquiries` table and falls back to `mailto:`; it does not deliver directly to the inbox.
+* **Rich Results Test / Search Console verification** — requires the live domain and a Google
+  account. Steps: (1) Rich Results Test on the homepage and `/contact/`, (2) Search Console →
+  URL Inspection → Request Indexing for the homepage and each service page, (3) submit
+  `/sitemap.xml`, (4) check Enhancements for Breadcrumbs and FAQ.
+
+## 11. Suggested next steps
+
+1. Provide the missing items in section 9 so the TODO notes can be removed.
+2. Convert images to WebP/AVIF and self-host the fonts.
+3. Configure redirects, caching and security headers at the host.
+4. Decide the cookie-consent position, then align Part 1 and Part 6.
+5. Re-run Lighthouse against the deployed URL and confirm the targets:
+   Mobile 85+ performance / 90+ accessibility / 95+ best practices / 100 SEO;
+   desktop 95+ performance / 100 SEO; LCP < 2.5s, CLS < 0.1, TBT < 200ms.

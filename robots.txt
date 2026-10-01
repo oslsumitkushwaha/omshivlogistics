@@ -1,12 +1,5 @@
-# robots.txt — Om Shiv Logistics
-# Replace the Sitemap host below if the live domain differs.
-
 User-agent: *
 Allow: /
-
-# No private or administrative paths exist on this marketing site.
-# Assets that search engines do not need to crawl as pages:
-Disallow: /js/vendor/
-Disallow: /js/
-
+Disallow: /admin/
+Disallow: /api/
 Sitemap: https://www.omshivlogistics.com/sitemap.xml

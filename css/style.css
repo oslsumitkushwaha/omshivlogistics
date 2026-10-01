@@ -936,16 +936,24 @@ ul { margin: 0; padding: 0; list-style: none; }
    item dividers of the two cards in a row on the same horizontal rhythm. */
 .contact-group__note { color: #a9b8cc; font-size: 0.8rem; margin: 0; line-height: 1.5; min-height: 3em; }
 
-/* Items stretch to fill the card so paired cards finish on the same line
-   and the divider rules sit on a consistent rhythm. */
-.contact-items { display: flex; flex-direction: column; flex: 1; }
+/* Items size to their own content and the leftover height is distributed
+   BETWEEN them, rather than forcing every item to an equal share. Forcing equal
+   shares is what previously made the taller address item (which now also holds
+   the Maps button) overflow its box and collide with the row beneath it. */
+.contact-items {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  gap: 0;
+}
 .contact-item {
   display: grid;
   align-content: start;
   gap: 3px;
   padding: 13px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  flex: 1;
+  flex: 0 0 auto;
 }
 .contact-item:first-child { border-top: 0; padding-top: 4px; }
 
@@ -969,6 +977,34 @@ a.contact-item__value:hover { color: var(--gold-soft); }
 .contact-item__value--plain { cursor: default; }
 .contact-item__extra { display: block; color: #cfdae8; font-size: 0.88rem; margin-top: 2px; }
 .contact-item__note { font-size: 0.75rem; color: #93a2b5; line-height: 1.45; }
+
+/* Prominent, obviously tappable Google Maps route for the office card. */
+.contact-item__maps {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--gold-soft);
+  background: rgba(233, 185, 73, 0.12);
+  border: 1px solid rgba(233, 185, 73, 0.4);
+  transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+  width: fit-content;
+}
+.contact-item__maps:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink-950);
+}
+.contact-item__maps .fa-arrow-up-right-from-square { font-size: 0.62rem; opacity: 0.8; }
+
+.footer-maps { color: var(--gold-soft); font-weight: 600; }
+.footer-maps:hover { color: #fff; }
+.footer-maps i { margin-right: 6px; color: var(--gold); }
 
 .contact-cta {
   margin-top: 26px;
@@ -1096,11 +1132,92 @@ a.contact-item__value:hover { color: var(--gold-soft); }
 }
 .pill i { color: var(--brand); }
 
-.poster-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 22px; }
-.poster-strip figure { margin: 0; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); background: #fff; border: 1px solid var(--line); }
-.poster-strip img { width: 100%; height: auto; transition: transform 0.45s ease; }
-.poster-strip figure:hover img { transform: scale(1.03); }
-.poster-strip figcaption { padding: 15px 18px; font-size: 0.8rem; color: var(--slate); font-weight: 600; }
+/* ------------------------------------------------------------- founder --- */
+/* Placement is deliberate: proof (clients, office) then the person, then the
+   contact block — a human face immediately before the ask converts better
+   than another list of claims. */
+.founder {
+  background:
+    radial-gradient(820px 380px at 8% 0%, rgba(233, 185, 73, 0.1), transparent 62%),
+    radial-gradient(760px 420px at 96% 100%, rgba(228, 0, 43, 0.08), transparent 64%),
+    var(--paper);
+}
+.founder__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: 52px;
+  align-items: center;
+}
+.founder__photo {
+  position: relative;
+  margin: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  aspect-ratio: 3 / 4;
+  background: var(--ink-900);
+}
+.founder__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+/* Gold hairline frame, offset — reads as premium without shouting. */
+.founder__frame {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(233, 185, 73, 0.55);
+  border-radius: var(--radius-lg);
+  margin: 14px;
+  z-index: 2;
+  pointer-events: none;
+}
+.founder__badge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  padding: 44px 22px 18px;
+  background: linear-gradient(0deg, rgba(5, 13, 24, 0.94) 12%, rgba(5, 13, 24, 0.72) 55%, rgba(5, 13, 24, 0));
+  color: #fff;
+}
+.founder__badge strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.founder__badge span {
+  display: block;
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin-top: 3px;
+}
+
+.founder__copy h2 { margin-bottom: 6px; }
+.founder__role {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-bottom: 18px;
+}
+.founder__points { display: grid; gap: 12px; margin: 24px 0 28px; }
+.founder__points li { display: flex; gap: 12px; align-items: flex-start; font-size: 0.92rem; color: #334155; }
+.founder__points i {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--brand-tint);
+  color: var(--brand);
+  font-size: 0.85rem;
+}
+.founder__actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
 .stat-band { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; text-align: center; }
 .stat-band strong {
@@ -1202,6 +1319,10 @@ a.contact-item__value:hover { color: var(--gold-soft); }
 
   .service-grid, .fleet-grid, .steps, .why-grid, .segment-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .step::after { display: none; }
+
+  /* Founder stacks: photo first, then the copy. */
+  .founder__grid { grid-template-columns: 1fr; gap: 34px; }
+  .founder__photo { max-width: 420px; margin: 0 auto; width: 100%; }
 }
 
 @media (max-width: 960px) {
@@ -1222,6 +1343,9 @@ a.contact-item__value:hover { color: var(--gold-soft); }
   .fab { width: 46px; height: 46px; font-size: 1.1rem; }
   .stat-band { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .contact-cta { padding: 22px; }
+
+  .founder__points li { font-size: 0.88rem; }
+  .founder__actions .btn { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 520px) {

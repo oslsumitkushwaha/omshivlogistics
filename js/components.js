@@ -170,6 +170,8 @@
               >
             `
           )}
+          <a href="/services/" class="main-nav__more">All services</a>
+          <a href="/contact/" class="main-nav__more">Get a quote</a>
         </nav>
 
         <div class="header-actions">
@@ -177,7 +179,7 @@
             <i class="fa-solid fa-phone-volume" aria-hidden="true"></i>
             ${D.CONTACT.phones[0].number}
           </a>
-          <button class="btn btn--primary btn--sm" onClick=${(e) => go(e, "contact")} type="button">
+          <button class="btn btn--primary btn--sm" onClick=${() => { window.location.href = "/contact/#quote"; }} type="button">
             <i class="fa-solid fa-headset" aria-hidden="true"></i> Get a Quote
           </button>
           <button
@@ -336,8 +338,8 @@
             </span>
 
             <h1>
-              <span class="line">Your Trusted Logistics</span>
-              <span class="accent">Partner Across India</span>
+              <span class="line">Transport Contractor in Gandhidham</span>
+              <span class="accent">Your Trusted Logistics Partner</span>
             </h1>
 
             <p class="lede on-dark">
@@ -930,33 +932,61 @@
     `;
   }
 
-  /* -------------------------------------------------------------- posters -- */
-  function Posters() {
-    const items = [
-      { src: "images/osl-pan-india-poster.png", w: 1024, h: 576, alt: "Om Shiv Logistics — your trusted logistics partner across India, Pan India presence", cap: "Pan India presence & core services" },
-      { src: "images/osl-solutions-poster.png", w: 1024, h: 576, alt: "Om Shiv Logistics — complete logistics solutions for your business", cap: "One platform, multiple solutions" },
-      { src: "images/osl-fleet-owner-poster.png", w: 1024, h: 576, alt: "Indradev Kushwaha, fleet owner of 32FT SXL and MXL containers, Gandhidham", cap: "Fleet ownership & registered office" }
-    ];
+  /* ------------------------------------------------------- brand gallery --- */
+
+  /* -------------------------------------------------------------- founder -- */
+  /* The head of the business. A human face and a name create more trust than
+     any further claim could, so this sits immediately before the contact block:
+     proof, then the person, then the call to action. */
+  function Founder() {
+    const f = D.FOUNDER;
     return html`
-      <section class="section" id="posters">
+      <section class="section founder" id="founder" aria-labelledby="founder-name">
         <div class="shell">
-          <${SectionHead}
-            eyebrow="Brand"
-            title="Our commitments, on the record"
-            lede="Safe · On time · Pan India. The same promises we print on our fleet boards."
-            center=${true}
-          />
-          <div class="poster-strip">
-            ${items.map(
-              (p) => html`
-                <figure class="reveal" key=${p.src}>
-                  <a href=${p.src} target="_blank" rel="noopener">
-                    <img src=${p.src} alt=${p.alt} width=${p.w} height=${p.h} loading="lazy" decoding="async" />
-                  </a>
-                  <figcaption>${p.cap}</figcaption>
-                </figure>
-              `
-            )}
+          <div class="founder__grid">
+            <figure class="founder__photo reveal">
+              <span class="founder__frame" aria-hidden="true"></span>
+              <img
+                src=${f.photo}
+                alt=${f.alt}
+                width="768"
+                height="1024"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption class="founder__badge">
+                <strong>${f.name}</strong>
+                <span>${f.role}</span>
+              </figcaption>
+            </figure>
+
+            <div class="founder__copy reveal">
+              <span class="eyebrow">Leadership</span>
+              <h2 id="founder-name">${f.name}</h2>
+              <p class="founder__role">${f.role} · Om Shiv Logistics</p>
+              <p class="lede">${f.lede}</p>
+              <p>${f.story}</p>
+
+              <ul class="founder__points">
+                ${f.points.map(
+                  (p, i) => html`
+                    <li key=${i}>
+                      <i class=${"fa-solid " + p.icon} aria-hidden="true"></i>
+                      <span>${p.text}</span>
+                    </li>
+                  `
+                )}
+              </ul>
+
+              <div class="founder__actions">
+                <a class="btn btn--primary" href=${"tel:+" + D.CONTACT.phones[0].raw}>
+                  <i class="fa-solid fa-phone" aria-hidden="true"></i> Speak to the booking desk
+                </a>
+                <a class="btn btn--outline" href=${D.CONTACT.maps} target="_blank" rel="noopener">
+                  <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> Visit us on Google Maps
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -988,6 +1018,14 @@
         <span class="contact-item__value contact-item__value--plain">
           ${item.value}
           ${item.extra ? html`<span class="contact-item__extra">${item.extra}</span>` : null}
+          ${item.maps
+            ? html`
+                <a class="contact-item__maps" href=${D.CONTACT.maps} target="_blank" rel="noopener">
+                  <i class="fa-brands fa-google" aria-hidden="true"></i> View on Google Maps
+                  <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                </a>
+              `
+            : null}
         </span>
       `;
     }
@@ -1075,25 +1113,37 @@
           <div>
             <h3>Services</h3>
             <ul>
-              ${D.SERVICES.map((s) => html`<li key=${s.id}><a href="#services">${s.title}</a></li>`)}
+              ${D.SERVICE_PAGES.map((s) => html`<li key=${s.path}><a href=${s.path}>${s.label}</a></li>`)}
             </ul>
           </div>
 
           <div>
-            <h3>Quick links</h3>
+            <h3>Locations &amp; company</h3>
             <ul>
-              ${D.NAV.map((n) => html`<li key=${n.id}><a href=${"#" + n.id}>${n.label}</a></li>`)}
-              <li><a href="#industries">Industries we serve</a></li>
+              ${D.CITY_PAGES.map((c) => html`<li key=${c.path}><a href=${c.path}>Transport in ${c.label}</a></li>`)}
+              ${D.COMPANY_PAGES.map((c) => html`<li key=${c.path}><a href=${c.path}>${c.label}</a></li>`)}
+              <li><a href="/#top">Home</a></li>
             </ul>
           </div>
 
           <div>
             <h3>Contact</h3>
-            <ul>
-              ${D.CONTACT.phones.map((p) => html`<li key=${p.raw}><a href=${"tel:+" + p.raw}>${p.number}</a></li>`)}
+            <ul class="footer-contact">
+              ${D.CONTACT.phones.map(
+                (p) => html`<li key=${p.raw}><a href=${"tel:+" + p.raw}>${p.label} — ${p.number}</a></li>`
+              )}
               <li><a href=${"mailto:" + D.CONTACT.email}>${D.CONTACT.email}</a></li>
-              <li>${D.CONTACT.address.line1}</li>
-              <li>${D.CONTACT.address.line2}</li>
+              <li><a href=${"mailto:" + D.CONTACT.generalEmail}>${D.CONTACT.generalEmail}</a></li>
+              <li>
+                <address class="footer-nap">
+                  Om Shiv Logistics, ${D.CONTACT.address.line1}, ${D.CONTACT.address.line2}, ${D.CONTACT.address.line3}
+                </address>
+              </li>
+              <li>
+                <a class="footer-maps" href=${D.CONTACT.maps} target="_blank" rel="noopener">
+                  Find us on Google Maps
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -1136,8 +1186,8 @@
 
   function MobileBar() {
     return html`
-      <a class="btn btn--primary" href=${"tel:+" + D.CONTACT.phones[0].raw}>
-        <i class="fa-solid fa-phone" aria-hidden="true"></i> Call
+      <a class="btn btn--primary" href=${"tel:+" + D.CONTACT.phones[0].raw} aria-label=${"Call the Om Shiv Logistics transport booking line, " + D.CONTACT.phones[0].number}>
+        <i class="fa-solid fa-phone" aria-hidden="true"></i> Call Now
       </a>
       <a
         class="btn btn--dark"
@@ -1148,8 +1198,8 @@
       >
         <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp
       </a>
-      <a class="btn btn--outline" style=${{ borderColor: "rgba(255,255,255,.4)", color: "#fff" }} href="#contact">
-        <i class="fa-solid fa-address-book" aria-hidden="true"></i> Contact
+      <a class="btn btn--outline" style=${{ borderColor: "rgba(255,255,255,.4)", color: "#fff" }} href="/contact/#quote">
+        <i class="fa-solid fa-file-invoice-dollar" aria-hidden="true"></i> Get a Quote
       </a>
     `;
   }
@@ -1169,7 +1219,7 @@
     HowWeWork,
     DispatchBoard,
     Faq,
-    Posters,
+    Founder,
     Contact,
     Footer,
     FloatActions,

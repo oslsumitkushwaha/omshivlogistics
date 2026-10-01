@@ -31,7 +31,12 @@
     ],
     email: "gandhidham@omshivlogistics.com",
     generalEmail: "contact@omshivlogistics.com",
-    whatsapp: "919374529413"
+    whatsapp: "919374529413",
+    /* Public Google Maps listing for the registered office.
+       NOTE: this replaces the earlier link (fRJyybhwDt4MJUk1A). The short URL
+       only returns a 302, so the place name could not be verified server-side —
+       see README "missing information". */
+    maps: "https://maps.app.goo.gl/fv4qFBzDQcibUEKcA"
   };
 
   /* ------------------------------------------------------------------------
@@ -112,7 +117,8 @@
           label: "Office Address",
           value: "North Flour Mill Building, Office No. 203",
           extra: "Zhanda Chowk, Gandhidham 370201",
-          note: "Kutch, Gujarat, India"
+          note: "Kutch, Gujarat, India",
+          maps: true
         },
         {
           kind: "note",
@@ -328,8 +334,58 @@
     { name: "SKAPS", src: "images/clients/skaps.png", tone: "dark" }
   ];
 
+  /* ------------------------------------------------------------ the founder --
+     The head of the business. Everything here is factual: his name and role
+     come from the client's brief, the fleet description from the client's own
+     poster. No invented biography, no founding year and no awards. */
+  const FOUNDER = {
+    name: "Indradev Kushwaha",
+    role: "Founder & Fleet Owner",
+    photo: "images/founder-indradev-kushwaha.jpg",
+    alt: "Indradev Kushwaha, founder and fleet owner of Om Shiv Logistics, Gandhidham",
+    lede: "Om Shiv Logistics is led by Indradev Kushwaha, a fleet owner whose home ground is Gandhidham and the wider Kutch belt.",
+    story:
+      "He owns and operates 32FT SXL and MXL container capacity and works directly with the businesses we move for — so pricing, vehicle placement and escalation all come back to one accountable person rather than a call centre.",
+    points: [
+      { icon: "fa-truck-front", text: "Owns 32FT SXL (9MT) and MXL (18MT) container capacity" },
+      { icon: "fa-location-dot", text: "Based at our registered office in Gandhidham, Kutch" },
+      { icon: "fa-user-check", text: "One accountable point of contact, from enquiry to delivery" }
+    ]
+  };
+
+  /* --------------------------------------------------------- inner pages --
+     Real URLs, one source of truth. Used by the footer, the mobile bar and the
+     "no orphan pages" internal link set, so the label and the path can never
+     drift apart. */
+  const SERVICE_PAGES = [
+    { path: "/services/", label: "All services" },
+    { path: "/services/container-booking-32ft/", label: "32FT Container Booking" },
+    { path: "/services/ftl-ptl-road-transport/", label: "FTL & PTL Road Transport" },
+    { path: "/services/commercial-vehicle-supply/", label: "Commercial Vehicle Supply" },
+    { path: "/services/transport-contracts/", label: "Transport Contracts" },
+    { path: "/services/commission-agency/", label: "Commission Agency" },
+    { path: "/services/kandla-mundra-port-transport/", label: "Kandla & Mundra Port Transport" }
+  ];
+
+  const CITY_PAGES = [
+    { path: "/locations/gandhidham/", label: "Gandhidham" },
+    { path: "/locations/kutch/", label: "Kutch (Kachchh)" },
+    { path: "/locations/mundra/", label: "Mundra" },
+    { path: "/locations/kandla/", label: "Kandla" }
+  ];
+
+  const COMPANY_PAGES = [
+    { path: "/about/", label: "About OSL" },
+    { path: "/contact/", label: "Contact" },
+    { path: "/privacy-policy/", label: "Privacy Policy" },
+    { path: "/terms/", label: "Terms of Use" }
+  ];
+
   window.OSL_DATA = {
     CONTACT: CONTACT,
+    SERVICE_PAGES: SERVICE_PAGES,
+    CITY_PAGES: CITY_PAGES,
+    COMPANY_PAGES: COMPANY_PAGES,
     CONTACT_GROUPS: CONTACT_GROUPS,
     NAV: NAV,
     HERO_STATS: HERO_STATS,
@@ -340,6 +396,7 @@
     STEPS: STEPS,
     SEGMENTS: SEGMENTS,
     FAQS: FAQS,
-    CLIENTS: CLIENTS
+    CLIENTS: CLIENTS,
+    FOUNDER: FOUNDER
   };
 })();
