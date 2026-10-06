@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>icon check</title>
+<style>
+  body{background:#fff;font:14px system-ui;padding:20px}
+  figure{display:inline-block;margin:10px;text-align:center}
+  img.big{width:192px;height:192px;image-rendering:pixelated;border:1px solid #ccc;background:#fff}
+</style></head>
+<body>
+<figure><img class="big" id="i48" src="favicon-48x48.png"><figcaption>favicon-48x48</figcaption></figure>
+<figure><img class="big" id="i96" src="favicon-96x96.png"><figcaption>favicon-96x96</figcaption></figure>
+<figure><img class="big" id="i144" src="favicon-144x144.png"><figcaption>favicon-144x144</figcaption></figure>
+<figure><img class="big" id="i192" src="favicon-192x192.png"><figcaption>favicon-192x192</figcaption></figure>
+<figure><img class="big" id="iico" src="favicon.ico"><figcaption>favicon.ico</figcaption></figure>
+<figure><img class="big" id="isq" src="images/osl-logo-square.jpg"><figcaption>osl-logo-square.jpg</figcaption></figure>
+<figure><img class="big" id="isoc" src="images/osl-social-preview.png"><figcaption>social preview</figcaption></figure>
+<script>
+window.addEventListener("load", function(){
+  setTimeout(function(){
+    var ids=["i48","i96","i144","i192","iico","isq","isoc"];
+    console.log("DIMS " + ids.map(function(id){
+      var e=document.getElementById(id);
+      return id+"="+e.naturalWidth+"x"+e.naturalHeight;
+    }).join(" | "));
+  },700);
+});
+</script>
+</body></html>

@@ -353,39 +353,8 @@
     ]
   };
 
-  /* --------------------------------------------------------- inner pages --
-     Real URLs, one source of truth. Used by the footer, the mobile bar and the
-     "no orphan pages" internal link set, so the label and the path can never
-     drift apart. */
-  const SERVICE_PAGES = [
-    { path: "/services/", label: "All services" },
-    { path: "/services/container-booking-32ft/", label: "32FT Container Booking" },
-    { path: "/services/ftl-ptl-road-transport/", label: "FTL & PTL Road Transport" },
-    { path: "/services/commercial-vehicle-supply/", label: "Commercial Vehicle Supply" },
-    { path: "/services/transport-contracts/", label: "Transport Contracts" },
-    { path: "/services/commission-agency/", label: "Commission Agency" },
-    { path: "/services/kandla-mundra-port-transport/", label: "Kandla & Mundra Port Transport" }
-  ];
-
-  const CITY_PAGES = [
-    { path: "/locations/gandhidham/", label: "Gandhidham" },
-    { path: "/locations/kutch/", label: "Kutch (Kachchh)" },
-    { path: "/locations/mundra/", label: "Mundra" },
-    { path: "/locations/kandla/", label: "Kandla" }
-  ];
-
-  const COMPANY_PAGES = [
-    { path: "/about/", label: "About OSL" },
-    { path: "/contact/", label: "Contact" },
-    { path: "/privacy-policy/", label: "Privacy Policy" },
-    { path: "/terms/", label: "Terms of Use" }
-  ];
-
   window.OSL_DATA = {
     CONTACT: CONTACT,
-    SERVICE_PAGES: SERVICE_PAGES,
-    CITY_PAGES: CITY_PAGES,
-    COMPANY_PAGES: COMPANY_PAGES,
     CONTACT_GROUPS: CONTACT_GROUPS,
     NAV: NAV,
     HERO_STATS: HERO_STATS,

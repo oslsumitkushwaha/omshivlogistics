@@ -170,8 +170,6 @@
               >
             `
           )}
-          <a href="/services/" class="main-nav__more">All services</a>
-          <a href="/contact/" class="main-nav__more">Get a quote</a>
         </nav>
 
         <div class="header-actions">
@@ -179,7 +177,7 @@
             <i class="fa-solid fa-phone-volume" aria-hidden="true"></i>
             ${D.CONTACT.phones[0].number}
           </a>
-          <button class="btn btn--primary btn--sm" onClick=${() => { window.location.href = "/contact/#quote"; }} type="button">
+          <button class="btn btn--primary btn--sm" onClick=${(e) => go(e, "contact")} type="button">
             <i class="fa-solid fa-headset" aria-hidden="true"></i> Get a Quote
           </button>
           <button
@@ -1113,16 +1111,17 @@
           <div>
             <h3>Services</h3>
             <ul>
-              ${D.SERVICE_PAGES.map((s) => html`<li key=${s.path}><a href=${s.path}>${s.label}</a></li>`)}
+              ${D.SERVICES.map((s) => html`<li key=${s.id}><a href="#services">${s.title}</a></li>`)}
             </ul>
           </div>
 
           <div>
-            <h3>Locations &amp; company</h3>
+            <h3>Quick links</h3>
             <ul>
-              ${D.CITY_PAGES.map((c) => html`<li key=${c.path}><a href=${c.path}>Transport in ${c.label}</a></li>`)}
-              ${D.COMPANY_PAGES.map((c) => html`<li key=${c.path}><a href=${c.path}>${c.label}</a></li>`)}
-              <li><a href="/#top">Home</a></li>
+              ${D.NAV.map((n) => html`<li key=${n.id}><a href=${"#" + n.id}>${n.label}</a></li>`)}
+              <li><a href="#founder">Leadership</a></li>
+              <li><a href="#industries">Industries we serve</a></li>
+              <li><a href="#clients">Our clients</a></li>
             </ul>
           </div>
 
@@ -1198,7 +1197,7 @@
       >
         <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp
       </a>
-      <a class="btn btn--outline" style=${{ borderColor: "rgba(255,255,255,.4)", color: "#fff" }} href="/contact/#quote">
+      <a class="btn btn--outline" style=${{ borderColor: "rgba(255,255,255,.4)", color: "#fff" }} href="#contact">
         <i class="fa-solid fa-file-invoice-dollar" aria-hidden="true"></i> Get a Quote
       </a>
     `;
